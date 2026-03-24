@@ -1,0 +1,176 @@
+/* ===========================================
+   Alaska Animation — Responsive Design
+   Mobile first approach
+   =========================================== */
+
+/* --- Mobile: hamburger visible, nav hidden --- */
+@media (max-width: 767px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .hero__buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .gallery-preview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery-grid {
+    columns: 1;
+  }
+
+  .service-detail {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .service-detail:nth-child(even) {
+    direction: ltr;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Reorder popular card first on mobile */
+  .pricing-card--popular {
+    order: -1;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-bio {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .about-bio__photo {
+    max-width: 300px;
+    margin: 0 auto;
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+  }
+
+  .footer__grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer__social {
+    justify-content: center;
+  }
+
+  .footer__contact-item {
+    justify-content: center;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .testimonial-card {
+    padding: 24px 16px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero--compact {
+    min-height: 30vh;
+    padding: 120px 20px 40px;
+  }
+
+  .section {
+    padding: 50px 0;
+  }
+
+  .section__header {
+    margin-bottom: 40px;
+  }
+}
+
+/* --- Tablets --- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .gallery-preview {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .gallery-grid {
+    columns: 2;
+  }
+
+  .footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-detail {
+    gap: 40px;
+  }
+}
+
+/* --- Desktop --- */
+@media (min-width: 1024px) {
+  .hamburger {
+    display: none;
+  }
+
+  .nav {
+    display: block;
+  }
+
+  .testimonial-card {
+    flex: 0 0 33.333%;
+  }
+}
+
+/* --- Large desktop --- */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1300px;
+  }
+}
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .confetti-container {
+    display: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}

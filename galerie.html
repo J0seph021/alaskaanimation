@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FF69B4">
+  <title>Galerie — Alaska Animation | Nos plus beaux moments</title>
+  <meta name="description" content="Decouvrez notre galerie photos : maquillages de fantaisie, sculptures de ballons et moments magiques de nos animations a Quebec.">
+  <link rel="icon" href="images/logo/logo-alaska-animation.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <a href="#main" class="skip-nav">Aller au contenu principal</a>
+
+  <header class="header header--scrolled" id="header">
+    <div class="container header__inner">
+      <a href="index.html" class="header__logo">
+        <img src="images/logo/logo-alaska-animation.svg" alt="Logo Alaska Animation" width="44" height="44">
+        <span>Alaska Animation</span>
+      </a>
+      <nav class="nav" aria-label="Navigation principale">
+        <ul class="nav__list">
+          <li><a href="index.html" class="nav__link">Accueil</a></li>
+          <li><a href="services.html" class="nav__link">Services</a></li>
+          <li><a href="galerie.html" class="nav__link nav__link--active">Galerie</a></li>
+          <li><a href="temoignages.html" class="nav__link">Temoignages</a></li>
+          <li><a href="a-propos.html" class="nav__link">A propos</a></li>
+          <li><a href="contact.html" class="nav__cta btn-primary btn-small">Reserver</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <span class="hamburger__line"></span>
+        <span class="hamburger__line"></span>
+        <span class="hamburger__line"></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-mobile" id="navMobile" role="navigation" aria-label="Menu mobile">
+    <a href="index.html" class="nav-mobile__link">Accueil</a>
+    <a href="services.html" class="nav-mobile__link">Services</a>
+    <a href="galerie.html" class="nav-mobile__link">Galerie</a>
+    <a href="temoignages.html" class="nav-mobile__link">Temoignages</a>
+    <a href="a-propos.html" class="nav-mobile__link">A propos</a>
+    <a href="contact.html" class="nav-mobile__link btn-primary">Reserver</a>
+  </div>
+
+  <main id="main">
+
+    <section class="hero hero--compact">
+      <div class="hero__content">
+        <h1 class="hero__title">Notre galerie</h1>
+        <p class="hero__subtitle">Revivez la magie de nos animations</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+
+        <!-- Filtres -->
+        <div class="gallery-filters reveal">
+          <button class="gallery-filter-btn gallery-filter-btn--active" data-filter="all">Tout</button>
+          <button class="gallery-filter-btn" data-filter="maquillage">Maquillage</button>
+          <button class="gallery-filter-btn" data-filter="ballons">Ballons</button>
+          <button class="gallery-filter-btn" data-filter="fetes">Fetes</button>
+          <button class="gallery-filter-btn" data-filter="evenements">Evenements</button>
+        </div>
+
+        <!-- Grille galerie -->
+        <div class="gallery-grid reveal" id="galleryGrid">
+          <div class="gallery-grid__item" data-category="maquillage">
+            <div class="gallery-placeholder" style="min-height:250px"><i class="fa-solid fa-palette" style="font-size:3rem;color:var(--pink-primary)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="ballons">
+            <div class="gallery-placeholder" style="min-height:300px"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:3rem;color:var(--turquoise-pop)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="fetes">
+            <div class="gallery-placeholder" style="min-height:220px"><i class="fa-solid fa-cake-candles" style="font-size:3rem;color:var(--purple-fun)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="maquillage">
+            <div class="gallery-placeholder" style="min-height:280px"><i class="fa-solid fa-face-laugh-beam" style="font-size:3rem;color:var(--yellow-joy)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="evenements">
+            <div class="gallery-placeholder" style="min-height:240px"><i class="fa-solid fa-building" style="font-size:3rem;color:var(--orange-warm)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="ballons">
+            <div class="gallery-placeholder" style="min-height:260px"><i class="fa-solid fa-heart" style="font-size:3rem;color:var(--coral)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="fetes">
+            <div class="gallery-placeholder" style="min-height:300px"><i class="fa-solid fa-star" style="font-size:3rem;color:var(--pink-dark)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="maquillage">
+            <div class="gallery-placeholder" style="min-height:230px"><i class="fa-solid fa-paint-roller" style="font-size:3rem;color:var(--mint-fresh)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="evenements">
+            <div class="gallery-placeholder" style="min-height:270px"><i class="fa-solid fa-people-group" style="font-size:3rem;color:var(--purple-fun)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="ballons">
+            <div class="gallery-placeholder" style="min-height:250px"><i class="fa-solid fa-gift" style="font-size:3rem;color:var(--turquoise-pop)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="fetes">
+            <div class="gallery-placeholder" style="min-height:290px"><i class="fa-solid fa-music" style="font-size:3rem;color:var(--pink-primary)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+          <div class="gallery-grid__item" data-category="maquillage">
+            <div class="gallery-placeholder" style="min-height:240px"><i class="fa-solid fa-masks-theater" style="font-size:3rem;color:var(--orange-warm)"></i></div>
+            <div class="gallery-preview__overlay"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+        </div>
+
+        <p class="text-center mt-40" style="color:var(--text-light);font-style:italic;">Les photos de nos animations seront ajoutees prochainement. En attendant, les placeholders representent les differentes categories.</p>
+
+      </div>
+    </section>
+
+    <section class="section section--pink cta-section">
+      <div class="container reveal">
+        <h2 class="cta-section__title">Vous aimez ce que vous voyez ?</h2>
+        <p class="cta-section__text">Reservez votre animation et creez des souvenirs inoubliables pour vos enfants !</p>
+        <a href="contact.html" class="btn-primary">Reserver une animation</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer__wave" aria-hidden="true">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0,0 C300,60 900,0 1200,60 L1200,0 L0,0 Z" fill="#FFF0F5"/>
+      </svg>
+    </div>
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">Alaska Animation</div>
+          <p class="footer__desc">Animation de fetes d'enfants, maquillage de fantaisie et sculptures de ballons dans la region de Quebec.</p>
+          <div class="footer__social">
+            <a href="https://www.facebook.com/profile.php?id=100094362618231" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul class="footer__links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="galerie.html">Galerie</a></li>
+            <li><a href="temoignages.html">Temoignages</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>En savoir plus</h4>
+          <ul class="footer__links">
+            <li><a href="a-propos.html">A propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Coordonnees</h4>
+          <div class="footer__contact-item"><i class="fa-solid fa-location-dot"></i> Region de Quebec</div>
+          <div class="footer__contact-item"><i class="fa-solid fa-clock"></i> Sur rendez-vous, 7j/7</div>
+        </div>
+      </div>
+      <div class="footer__bottom">&copy; 2026 Alaska Animation. Tous droits reserves.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/gallery.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FF69B4">
+  <title>Nos services — Alaska Animation | Animation, Maquillage, Ballons</title>
+  <meta name="description" content="Decouvrez nos services d'animation : maquillage de fantaisie, sculptures de ballons, animation de fetes d'enfants et evenements corporatifs a Quebec.">
+  <link rel="icon" href="images/logo/logo-alaska-animation.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <a href="#main" class="skip-nav">Aller au contenu principal</a>
+
+  <!-- Header -->
+  <header class="header header--scrolled" id="header">
+    <div class="container header__inner">
+      <a href="index.html" class="header__logo">
+        <img src="images/logo/logo-alaska-animation.svg" alt="Logo Alaska Animation" width="44" height="44">
+        <span>Alaska Animation</span>
+      </a>
+      <nav class="nav" aria-label="Navigation principale">
+        <ul class="nav__list">
+          <li><a href="index.html" class="nav__link">Accueil</a></li>
+          <li><a href="services.html" class="nav__link nav__link--active">Services</a></li>
+          <li><a href="galerie.html" class="nav__link">Galerie</a></li>
+          <li><a href="temoignages.html" class="nav__link">Temoignages</a></li>
+          <li><a href="a-propos.html" class="nav__link">A propos</a></li>
+          <li><a href="contact.html" class="nav__cta btn-primary btn-small">Reserver</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <span class="hamburger__line"></span>
+        <span class="hamburger__line"></span>
+        <span class="hamburger__line"></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-mobile" id="navMobile" role="navigation" aria-label="Menu mobile">
+    <a href="index.html" class="nav-mobile__link">Accueil</a>
+    <a href="services.html" class="nav-mobile__link">Services</a>
+    <a href="galerie.html" class="nav-mobile__link">Galerie</a>
+    <a href="temoignages.html" class="nav-mobile__link">Temoignages</a>
+    <a href="a-propos.html" class="nav-mobile__link">A propos</a>
+    <a href="contact.html" class="nav-mobile__link btn-primary">Reserver</a>
+  </div>
+
+  <main id="main">
+
+    <!-- Hero compact -->
+    <section class="hero hero--compact">
+      <div class="hero__content">
+        <h1 class="hero__title">Nos services d'animation</h1>
+        <p class="hero__subtitle">Trouvez l'animation parfaite pour votre evenement</p>
+      </div>
+    </section>
+
+    <!-- Services detailles -->
+    <section class="section">
+      <div class="container">
+
+        <!-- Maquillage -->
+        <div class="service-detail reveal" id="maquillage">
+          <div class="service-detail__image">
+            <div class="gallery-placeholder" style="height:100%;aspect-ratio:4/3"><i class="fa-solid fa-palette" style="font-size:4rem;color:var(--pink-primary)"></i></div>
+          </div>
+          <div class="service-detail__content">
+            <h3><i class="fa-solid fa-palette" style="color:var(--pink-primary)"></i> Maquillage de fantaisie</h3>
+            <p>Transformez les enfants en papillons, princesses, super-heros, animaux et plus encore ! Notre maquilleuse utilise du materiel professionnel, hypoallergenique et certifie pour la peau des enfants.</p>
+            <ul class="service-detail__features">
+              <li>Materiel professionnel certifie</li>
+              <li>Modeles varies (animaux, princesses, super-heros, etc.)</li>
+              <li>Adapte a tous les ages</li>
+              <li>Produits hypoallergeniques</li>
+            </ul>
+            <a href="contact.html" class="btn-primary btn-small">Reserver ce service</a>
+          </div>
+        </div>
+
+        <!-- Ballons -->
+        <div class="service-detail reveal" id="ballons">
+          <div class="service-detail__image">
+            <div class="gallery-placeholder" style="height:100%;aspect-ratio:4/3"><i class="fa-solid fa-wand-magic-sparkles" style="font-size:4rem;color:var(--turquoise-pop)"></i></div>
+          </div>
+          <div class="service-detail__content">
+            <h3><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--turquoise-pop)"></i> Sculptures de ballons</h3>
+            <p>Des sculptures de ballons elaborees qui emerveilleront petits et grands ! Oubliez les simples chiens en un ballon — nos creations multi-ballons vont des animaux aux personnages favoris des enfants.</p>
+            <ul class="service-detail__features">
+              <li>Creations multi-ballons elaborees</li>
+              <li>Modeles personnalises</li>
+              <li>Cadeau souvenir pour chaque enfant</li>
+              <li>Parfait pour tous les evenements</li>
+            </ul>
+            <a href="contact.html" class="btn-primary btn-small">Reserver ce service</a>
+          </div>
+        </div>
+
+        <!-- Fetes -->
+        <div class="service-detail reveal" id="fetes">
+          <div class="service-detail__image">
+            <div class="gallery-placeholder" style="height:100%;aspect-ratio:4/3"><i class="fa-solid fa-cake-candles" style="font-size:4rem;color:var(--purple-fun)"></i></div>
+          </div>
+          <div class="service-detail__content">
+            <h3><i class="fa-solid fa-cake-candles" style="color:var(--purple-fun)"></i> Animation de fetes d'enfants</h3>
+            <p>Une fete cle en main ! Notre animatrice arrive avec tout le materiel, costumee et prete a creer une experience magique pour votre enfant et ses amis. Jeux, musique, activites thematiques — on s'occupe de tout !</p>
+            <ul class="service-detail__features">
+              <li>Animation de 1h a 2h</li>
+              <li>Materiel complet fourni</li>
+              <li>Thematiques variees</li>
+              <li>Activites adaptees a l'age</li>
+            </ul>
+            <a href="contact.html" class="btn-primary btn-small">Reserver ce service</a>
+          </div>
+        </div>
+
+        <!-- Corporatif -->
+        <div class="service-detail reveal" id="corporatif">
+          <div class="service-detail__image">
+            <div class="gallery-placeholder" style="height:100%;aspect-ratio:4/3"><i class="fa-solid fa-building" style="font-size:4rem;color:var(--orange-warm)"></i></div>
+          </div>
+          <div class="service-detail__content">
+            <h3><i class="fa-solid fa-building" style="color:var(--orange-warm)"></i> Evenements corporatifs et festivals</h3>
+            <p>Ajoutez une touche festive a vos evenements d'entreprise, festivals, kermesses et fetes de quartier. Maquillage et ballons en continu pour divertir petits et grands pendant des heures.</p>
+            <ul class="service-detail__features">
+              <li>Service en continu (minimum 2h)</li>
+              <li>Installation autonome</li>
+              <li>Adapte aux grands groupes</li>
+              <li>Ideal fetes de quartier, festivals, CPE</li>
+            </ul>
+            <a href="contact.html" class="btn-primary btn-small">Reserver ce service</a>
+          </div>
+        </div>
+
+        <!-- Thematique -->
+        <div class="service-detail reveal" id="thematique">
+          <div class="service-detail__image">
+            <div class="gallery-placeholder" style="height:100%;aspect-ratio:4/3"><i class="fa-solid fa-snowflake" style="font-size:4rem;color:var(--coral)"></i></div>
+          </div>
+          <div class="service-detail__content">
+            <h3><i class="fa-solid fa-snowflake" style="color:var(--coral)"></i> Animations thematiques</h3>
+            <p>Noel, Halloween, Paques, fin d'annee scolaire... Alaska Animation offre des animations specialement concues pour les occasions speciales, avec costumes et decors thematiques.</p>
+            <ul class="service-detail__features">
+              <li>Costumes et accessoires thematiques</li>
+              <li>Decors adaptes a l'occasion</li>
+              <li>Activites speciales saisonnieres</li>
+              <li>Ambiance immersive garantie</li>
+            </ul>
+            <a href="contact.html" class="btn-primary btn-small">Reserver ce service</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Forfaits -->
+    <section class="section section--pink">
+      <div class="container">
+        <div class="section__header reveal">
+          <h2 class="section__title">Nos forfaits</h2>
+          <p class="section__subtitle">Des formules adaptees a vos besoins et votre budget</p>
+        </div>
+        <div class="pricing-grid">
+          <div class="pricing-card reveal">
+            <h3 class="pricing-card__title">Essentiel</h3>
+            <div class="pricing-card__price">A partir de XXX$</div>
+            <ul class="pricing-card__features">
+              <li>Maquillage OU Ballons</li>
+              <li>Duree : environ 1h</li>
+              <li>Jusqu'a 10-12 enfants</li>
+              <li>Materiel inclus</li>
+            </ul>
+            <a href="contact.html" class="btn-primary btn-small">Reserver</a>
+          </div>
+          <div class="pricing-card pricing-card--popular reveal">
+            <span class="pricing-badge">Le plus populaire !</span>
+            <h3 class="pricing-card__title">Populaire</h3>
+            <div class="pricing-card__price">A partir de XXX$</div>
+            <ul class="pricing-card__features">
+              <li>Maquillage + Ballons</li>
+              <li>Duree : environ 1h30</li>
+              <li>Jusqu'a 12-15 enfants</li>
+              <li>Materiel inclus</li>
+              <li>Cadeau souvenir pour chaque enfant</li>
+            </ul>
+            <a href="contact.html" class="btn-primary btn-small">Reserver</a>
+          </div>
+          <div class="pricing-card reveal">
+            <h3 class="pricing-card__title">Sur mesure</h3>
+            <div class="pricing-card__price">Sur devis</div>
+            <ul class="pricing-card__features">
+              <li>Combinaison personnalisee de services</li>
+              <li>Animation thematique possible</li>
+              <li>Evenements de toute taille</li>
+              <li>Duree flexible</li>
+            </ul>
+            <a href="contact.html" class="btn-primary btn-small">Demander une soumission</a>
+          </div>
+        </div>
+        <p class="text-center mt-40" style="color:var(--text-medium);font-size:var(--font-small);">Les prix peuvent varier selon le nombre d'enfants, la duree souhaitee et la distance de deplacement. Contactez-nous pour un prix exact !</p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <div class="container">
+        <div class="section__header reveal">
+          <h2 class="section__title">Questions frequentes</h2>
+        </div>
+        <div class="faq-list reveal">
+          <div class="faq-item">
+            <button class="faq-item__question" aria-expanded="false">
+              Quelle est votre zone de deplacement ?
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__answer">
+              <p>Nous desservons la grande region de Quebec incluant Quebec, Levis, Beauport, Charlesbourg, Sainte-Foy, Cap-Rouge, L'Ancienne-Lorette, Val-Belair et les environs. Des frais de deplacement peuvent s'appliquer au-dela de 30 km.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-item__question" aria-expanded="false">
+              Les produits de maquillage sont-ils securitaires ?
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__answer">
+              <p>Absolument ! Nous utilisons uniquement des produits de maquillage professionnels, hypoallergeniques et certifies pour la peau des enfants. La securite de vos petits est notre priorite.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-item__question" aria-expanded="false">
+              Combien de temps d'avance faut-il reserver ?
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__answer">
+              <p>Nous recommandons de reserver au moins 2 a 3 semaines a l'avance, surtout durant la haute saison (mai a septembre). Cependant, n'hesitez pas a nous contacter meme a la derniere minute — nous ferons notre possible !</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-item__question" aria-expanded="false">
+              Que se passe-t-il en cas de pluie pour un evenement exterieur ?
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__answer">
+              <p>Nous pouvons nous adapter ! Si un espace couvert est disponible, nous pouvons y installer notre materiel. Sinon, nous pouvons reporter l'animation a une date ulterieure sans frais supplementaires.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-item__question" aria-expanded="false">
+              Faut-il fournir une table ou du materiel ?
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__answer">
+              <p>Idealement, une table et deux chaises suffisent pour le maquillage. Nous apportons tout le reste du materiel necessaire. Si vous n'avez pas de table disponible, faites-le nous savoir a l'avance.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-item__question" aria-expanded="false">
+              Y a-t-il un nombre minimum d'enfants ?
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__answer">
+              <p>Non, il n'y a pas de nombre minimum ! Que ce soit pour une petite fete intime ou un grand evenement, nous adaptons notre service a vos besoins.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-item__question" aria-expanded="false">
+              Faites-vous des animations pour adultes aussi ?
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__answer">
+              <p>Bien sur ! Le maquillage de fantaisie et les sculptures de ballons plaisent a tous les ages. Nous animons regulierement des evenements corporatifs et des festivals ou les adultes participent avec autant d'enthousiasme que les enfants.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-item__question" aria-expanded="false">
+              Comment se passe le paiement ?
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__answer">
+              <p>Un depot est demande pour confirmer la reservation. Le solde est payable le jour de l'evenement. Nous acceptons les virements Interac et l'argent comptant. Les details vous seront communiques lors de la confirmation de reservation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section--pink cta-section">
+      <div class="container reveal">
+        <h2 class="cta-section__title">Pret a creer des souvenirs magiques ?</h2>
+        <p class="cta-section__text">Contactez-nous des maintenant pour reserver votre animation et offrir a vos enfants une fete inoubliable !</p>
+        <a href="contact.html" class="btn-primary">Reserver maintenant</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__wave" aria-hidden="true">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0,0 C300,60 900,0 1200,60 L1200,0 L0,0 Z" fill="#FFF0F5"/>
+      </svg>
+    </div>
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">Alaska Animation</div>
+          <p class="footer__desc">Animation de fetes d'enfants, maquillage de fantaisie et sculptures de ballons dans la region de Quebec.</p>
+          <div class="footer__social">
+            <a href="https://www.facebook.com/profile.php?id=100094362618231" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul class="footer__links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="galerie.html">Galerie</a></li>
+            <li><a href="temoignages.html">Temoignages</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>En savoir plus</h4>
+          <ul class="footer__links">
+            <li><a href="a-propos.html">A propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Coordonnees</h4>
+          <div class="footer__contact-item"><i class="fa-solid fa-location-dot"></i> Region de Quebec</div>
+          <div class="footer__contact-item"><i class="fa-solid fa-clock"></i> Sur rendez-vous, 7j/7</div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        &copy; 2026 Alaska Animation. Tous droits reserves.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
