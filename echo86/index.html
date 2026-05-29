@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Echo86</title>
+<style>
+:root{--bg:#0d0f14;--card:#161a22;--txt:#e8eaed;--muted:#9aa0aa;--accent:#3b82f6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+header{padding:28px 20px 12px;text-align:center}
+header h1{margin:0;font-size:1.7rem;letter-spacing:.5px}
+header p{margin:6px 0 0;color:var(--muted)}
+a{color:var(--accent);text-decoration:none}
+.back{display:inline-block;margin:14px 20px 0}
+.grid{display:grid;gap:10px;padding:18px;
+grid-template-columns:repeat(auto-fill,minmax(180px,1fr));max-width:1200px;margin:0 auto}
+.grid a{display:block;border-radius:8px;overflow:hidden;background:var(--card);
+aspect-ratio:4/3}
+.grid img{width:100%;height:100%;object-fit:cover;display:block;
+transition:transform .25s ease}
+.grid a:hover img{transform:scale(1.05)}
+.cats{display:grid;gap:16px;padding:24px;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));max-width:1100px;margin:0 auto}
+.cat{background:var(--card);border-radius:12px;overflow:hidden;
+display:block;color:var(--txt)}
+.cat .cover{aspect-ratio:4/3;overflow:hidden}
+.cat .cover img{width:100%;height:100%;object-fit:cover}
+.cat .label{padding:14px 16px;font-size:1.05rem;font-weight:600}
+.cat .label span{display:block;color:var(--muted);font-weight:400;font-size:.85rem;margin-top:2px}
+footer{text-align:center;color:var(--muted);padding:30px 20px;font-size:.85rem}
+/* lightbox */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.94);display:none;
+align-items:center;justify-content:center;z-index:50}
+.lb.open{display:flex}
+.lb img{max-width:94vw;max-height:90vh;object-fit:contain}
+.lb .nav{position:absolute;top:0;bottom:0;width:42%;cursor:pointer;
+display:flex;align-items:center;color:#fff;font-size:2.5rem;user-select:none;opacity:.5}
+.lb .nav:hover{opacity:1}
+.lb .prev{left:0;justify-content:flex-start;padding-left:18px}
+.lb .next{right:0;justify-content:flex-end;padding-right:18px}
+.lb .close{position:absolute;top:14px;right:20px;color:#fff;font-size:2rem;
+cursor:pointer;opacity:.6}
+.lb .close:hover{opacity:1}
+</style>
+</head><body><header><h1>Echo86</h1><p>Le projet en photos</p></header><div class="cats"><a class="cat" href="carbone-pieces/index.html"><div class="cover"><img loading="lazy" src="carbone-pieces/thumbs/IMG_0503.jpg" alt=""></div><div class="label">Carbone &amp; Pieces<span>24 photos</span></div></a><a class="cat" href="exterieur/index.html"><div class="cover"><img loading="lazy" src="exterieur/thumbs/IMG_0450.jpg" alt=""></div><div class="label">Exterieur<span>32 photos</span></div></a><a class="cat" href="interieur/index.html"><div class="cover"><img loading="lazy" src="interieur/thumbs/IMG_0456.jpg" alt=""></div><div class="label">Interieur<span>15 photos</span></div></a><a class="cat" href="moteur/index.html"><div class="cover"><img loading="lazy" src="moteur/thumbs/IMG_0448.jpg" alt=""></div><div class="label">Moteur &amp; Turbo<span>54 photos</span></div></a><a class="cat" href="refroidissement/index.html"><div class="cover"><img loading="lazy" src="refroidissement/thumbs/IMG_0751.jpg" alt=""></div><div class="label">Refroidissement<span>21 photos</span></div></a><a class="cat" href="roues-freins/index.html"><div class="cover"><img loading="lazy" src="roues-freins/thumbs/IMG_0460.jpg" alt=""></div><div class="label">Roues &amp; Freins<span>20 photos</span></div></a></div><footer>Echo86</footer></body></html>
