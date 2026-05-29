@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Today</title>
+<style>
+:root{--bg:#FFF0F5;--card:#FFFFFF;--txt:#2D2D2D;--muted:#9a6b7d;--accent:#FF1493;
+--shadow:0 8px 30px rgba(255,105,180,.18)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+header{padding:28px 20px 12px;text-align:center}
+header h1{margin:0;font-size:1.7rem;letter-spacing:.5px;
+background:linear-gradient(135deg,#FF69B4 0%,#FF1493 50%,#9B59B6 100%);
+-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header p{margin:6px 0 0;color:var(--muted)}
+a{color:var(--accent);text-decoration:none}
+.back{display:inline-block;margin:14px 20px 0}
+.grid{display:grid;gap:10px;padding:18px;
+grid-template-columns:repeat(auto-fill,minmax(180px,1fr));max-width:1200px;margin:0 auto}
+.grid a{display:block;border-radius:12px;overflow:hidden;background:var(--card);
+aspect-ratio:4/3;box-shadow:var(--shadow)}
+.grid img{width:100%;height:100%;object-fit:cover;display:block;
+transition:transform .25s ease}
+.grid a:hover img{transform:scale(1.05)}
+.vid{max-width:720px;margin:8px auto 4px;padding:0 18px}
+.vid video{width:100%;height:auto;border-radius:16px;box-shadow:var(--shadow);
+display:block;background:#000}
+footer{text-align:center;color:var(--muted);padding:30px 20px;font-size:.85rem}
+/* lightbox */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.94);display:none;
+align-items:center;justify-content:center;z-index:50}
+.lb.open{display:flex}
+.lb img{max-width:94vw;max-height:90vh;object-fit:contain}
+.lb .nav{position:absolute;top:0;bottom:0;width:42%;cursor:pointer;
+display:flex;align-items:center;color:#fff;font-size:2.5rem;user-select:none;opacity:.5}
+.lb .nav:hover{opacity:1}
+.lb .prev{left:0;justify-content:flex-start;padding-left:18px}
+.lb .next{right:0;justify-content:flex-end;padding-right:18px}
+.lb .close{position:absolute;top:14px;right:20px;color:#fff;font-size:2rem;
+cursor:pointer;opacity:.6}
+.lb .close:hover{opacity:1}
+</style>
+</head><body><a class="back" href="../index.html">&#8592; Toutes les categories</a><header><h1>Today</h1><p>14 photos + video</p></header><div class="vid"><video controls preload="metadata" playsinline src="vid/video01.mp4"></video></div><div class="grid"><a href="img/IMG_01.jpg"><img loading="lazy" src="thumbs/IMG_01.jpg" alt=""></a><a href="img/IMG_02.jpg"><img loading="lazy" src="thumbs/IMG_02.jpg" alt=""></a><a href="img/IMG_03.jpg"><img loading="lazy" src="thumbs/IMG_03.jpg" alt=""></a><a href="img/IMG_04.jpg"><img loading="lazy" src="thumbs/IMG_04.jpg" alt=""></a><a href="img/IMG_05.jpg"><img loading="lazy" src="thumbs/IMG_05.jpg" alt=""></a><a href="img/IMG_06.jpg"><img loading="lazy" src="thumbs/IMG_06.jpg" alt=""></a><a href="img/IMG_07.jpg"><img loading="lazy" src="thumbs/IMG_07.jpg" alt=""></a><a href="img/IMG_08.jpg"><img loading="lazy" src="thumbs/IMG_08.jpg" alt=""></a><a href="img/IMG_09.jpg"><img loading="lazy" src="thumbs/IMG_09.jpg" alt=""></a><a href="img/IMG_10.jpg"><img loading="lazy" src="thumbs/IMG_10.jpg" alt=""></a><a href="img/IMG_11.jpg"><img loading="lazy" src="thumbs/IMG_11.jpg" alt=""></a><a href="img/IMG_12.jpg"><img loading="lazy" src="thumbs/IMG_12.jpg" alt=""></a><a href="img/IMG_13.jpg"><img loading="lazy" src="thumbs/IMG_13.jpg" alt=""></a><a href="img/IMG_14.jpg"><img loading="lazy" src="thumbs/IMG_14.jpg" alt=""></a></div>
+<div class="lb" id="lb">
+  <div class="close" onclick="lbClose()">&times;</div>
+  <div class="nav prev" onclick="lbStep(-1)">&#10094;</div>
+  <img id="lbImg" src="" alt="">
+  <div class="nav next" onclick="lbStep(1)">&#10095;</div>
+</div>
+<script>
+var imgs=Array.prototype.slice.call(document.querySelectorAll('.grid a'));
+var cur=0;
+imgs.forEach(function(a,i){a.addEventListener('click',function(e){
+  e.preventDefault();cur=i;lbOpen();});});
+function lbOpen(){document.getElementById('lbImg').src=imgs[cur].getAttribute('href');
+  document.getElementById('lb').classList.add('open');}
+function lbClose(){document.getElementById('lb').classList.remove('open');}
+function lbStep(d){cur=(cur+d+imgs.length)%imgs.length;
+  document.getElementById('lbImg').src=imgs[cur].getAttribute('href');}
+document.addEventListener('keydown',function(e){
+  if(!document.getElementById('lb').classList.contains('open'))return;
+  if(e.key==='Escape')lbClose();
+  if(e.key==='ArrowLeft')lbStep(-1);
+  if(e.key==='ArrowRight')lbStep(1);});
+document.getElementById('lb').addEventListener('click',function(e){
+  if(e.target===this)lbClose();});
+</script>
+<footer>Echo86</footer></body></html>
