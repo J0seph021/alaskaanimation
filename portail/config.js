@@ -11,7 +11,7 @@
    =========================================================== */
 
 export const SUPABASE_URL = "https://ryaigwgkskeceseglhli.supabase.co";
-export const SUPABASE_KEY = "sb_publishable_0PuIPgM4uq61bgBZn8TDbQ_y9vbC8xd";
+export const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5YWlnd2drc2tlY2VzZWdsaGxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5NDYzMDIsImV4cCI6MjA4OTUyMjMwMn0.amTLfnwn5nqeX_fSqbwc28WzwKjJkNoHdehlpN6MtCU";
 
 /* Valeurs par défaut si aucun réglage n'existe encore.
    (Sert seulement de filet de sécurité — les vrais réglages
