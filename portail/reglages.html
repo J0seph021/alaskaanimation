@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#FF69B4">
+<title>Réglages — Alaska Animation</title>
+<link rel="icon" href="../images/logo/logo-alaska-animation.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <img src="../images/logo/logo-alaska-animation.svg" alt="">
+  <div class="brand">Réglages<span>Alaska Animation</span></div>
+  <div class="spacer"></div>
+  <button onclick="location.href='app.html'"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+</div>
+
+<div class="wrap">
+
+  <p class="section-help" style="margin-bottom:18px">
+    💡 Ici tu choisis ce qui apparaît sur tes factures et dans les menus.
+    Remplis ce que tu veux, puis appuie sur <strong>Enregistrer</strong> en bas. C'est tout !
+  </p>
+
+  <!-- Mes informations -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-user"></i> Mes informations</div>
+    <p class="section-help">Ces infos s'affichent en bas de chaque facture (qui payer) et dans la signature.</p>
+
+    <label for="ownerName">Ton nom (signature)</label>
+    <input type="text" id="ownerName" placeholder="Maggie Forget">
+
+    <label for="ownerTitle">Titre sous la signature</label>
+    <input type="text" id="ownerTitle" placeholder="Propriétaire de Alaska Animation">
+
+    <label for="businessName">Nom de l'entreprise</label>
+    <input type="text" id="businessName" placeholder="Alaska Animation">
+
+    <label for="address">Adresse</label>
+    <textarea id="address" placeholder="1735 rue chanoine-boulet&#10;Plessisville, Qc, G6L 1B3"></textarea>
+
+    <div class="row">
+      <div>
+        <label for="phone">Téléphone</label>
+        <input type="tel" id="phone" placeholder="(514) 708-8281">
+      </div>
+      <div>
+        <label for="email">Courriel</label>
+        <input type="email" id="email" placeholder="alaskaanimationco@outlook.com">
+      </div>
+    </div>
+  </div>
+
+  <!-- Mes services -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-list-check"></i> Mes services</div>
+    <p class="section-help">
+      La liste de choix qui apparaît quand tu crées une facture. Pour chaque service :
+      son nom, son prix, et l'unité (écris <strong>/h</strong> si c'est à l'heure, sinon laisse vide).
+    </p>
+    <div class="svc-head"><div>Service</div><div>Prix ($)</div><div>Unité</div><div></div></div>
+    <div id="svcList"></div>
+    <button type="button" class="add-item" id="addSvc">
+      <i class="fa-solid fa-plus"></i> Ajouter un service
+    </button>
+  </div>
+
+  <!-- Numérotation -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-hashtag"></i> Numéro de facture</div>
+    <p class="section-help">Le numéro qui sera proposé pour ta <strong>prochaine</strong> facture (il avance tout seul ensuite).</p>
+    <input type="number" id="nextNo" min="1" step="1" style="max-width:160px" placeholder="23">
+  </div>
+
+  <div class="saved-bar">
+    <button class="btn btn-primary btn-block" id="saveBtn">
+      <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="reglages.js"></script>
+</body>
+</html>

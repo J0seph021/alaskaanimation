@@ -1,15 +1,30 @@
 /* ===========================================================
-   Portail Alaska Animation — Consultation d'une facture
+   Portail Alaska Animation — Affichage d'une facture
+   (mise en page calquée sur le modèle Canva de Maggie)
    =========================================================== */
 import { supabase, requireSession } from "./supabase.js";
-import { BUSINESS } from "./config.js";
+import { getSettings } from "./settings.js";
 
 await requireSession();
+const settings = await getSettings();
 
 const $ = (id) => document.getElementById(id);
-const money = (n) => (Number(n) || 0).toLocaleString("fr-CA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " $";
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+/* Format monétaire du modèle : « 930$ », « 205$/h », « 50,50$ » */
+const num = (n) => {
+  n = Number(n) || 0;
+  return Number.isInteger(n) ? String(n) : n.toFixed(2).replace(".", ",");
+};
+const dollars = (n) => num(n) + "$";
+
+/* Date jj.mm.aaaa */
+const dotDate = (d) => {
+  if (!d) return "";
+  const [y, m, day] = d.split("-");
+  return `${day}.${m}.${y}`;
+};
 
 let toastTimer;
 function toast(msg, isError = false) {
@@ -20,30 +35,16 @@ function toast(msg, isError = false) {
   toastTimer = setTimeout(() => (t.className = "toast"), 2600);
 }
 
-const fmtDate = (d) => d
-  ? new Date(d + "T00:00:00").toLocaleDateString("fr-CA", { day: "numeric", month: "long", year: "numeric" })
-  : "—";
-
 const id = new URLSearchParams(location.search).get("id");
 let invoice = null;
 
-if (!id) {
-  $("invoiceCard").innerHTML = '<p class="empty">Facture introuvable.</p>';
-} else {
-  load();
-}
+if (!id) { $("facCard").innerHTML = '<p class="empty">Facture introuvable.</p>'; }
+else { load(); }
 
 async function load() {
   const { data, error } = await supabase
-    .from("alaska_invoices")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error || !data) {
-    $("invoiceCard").innerHTML = '<p class="empty">Facture introuvable.</p>';
-    return;
-  }
+    .from("alaska_invoices").select("*").eq("id", id).single();
+  if (error || !data) { $("facCard").innerHTML = '<p class="empty">Facture introuvable.</p>'; return; }
   invoice = data;
   render();
   $("actions").hidden = false;
@@ -52,140 +53,122 @@ async function load() {
 
 function render() {
   const inv = invoice;
-  const bizContact = [
-    BUSINESS.region,
-    BUSINESS.phone,
-    BUSINESS.email,
-    BUSINESS.website,
-  ].filter(Boolean).join(" · ");
+  const b = settings.business;
 
   const rows = (inv.items || []).map((it) => `
     <tr>
       <td>${esc(it.description || "")}</td>
-      <td class="num">${it.qty}</td>
-      <td class="num">${money(it.price)}</td>
-      <td class="num">${money(it.total)}</td>
+      <td>${it.price ? esc(dollars(it.price) + (it.suffix || "")) : ""}</td>
+      <td>${esc(it.qty ?? "")}</td>
+      <td class="r">${esc(dollars(it.total))}</td>
     </tr>`).join("");
 
-  const clientLines = [
-    inv.client_name,
-    inv.client_phone,
-    inv.client_email,
-  ].filter(Boolean).map((l) => `<div>${esc(l)}</div>`).join("");
+  const addr = b.address ? `\n${b.address}` : "";
 
-  const eventLines = [
-    inv.event_type ? `<div>${esc(inv.event_type)}</div>` : "",
-    inv.event_date ? `<div>${fmtDate(inv.event_date)}</div>` : "",
-    inv.event_location ? `<div>${esc(inv.event_location)}</div>` : "",
-  ].join("") || "<div>—</div>";
+  $("facCard").innerHTML = `
+    <div class="fac__title">Facture</div>
 
-  const createdOn = new Date(inv.created_at).toLocaleDateString("fr-CA", { day: "numeric", month: "long", year: "numeric" });
-
-  $("invoiceCard").innerHTML = `
-    <div class="inv-top">
-      <div class="inv-biz">
-        <img src="${esc(BUSINESS.logo)}" alt="">
-        <div>
-          <div class="nm">${esc(BUSINESS.name)}</div>
-          <div class="tg">${esc(BUSINESS.tagline)}</div>
-          ${bizContact ? `<div class="ct">${esc(bizContact)}</div>` : ""}
-        </div>
-      </div>
-      <div class="inv-label">
-        <div class="big">FACTURE</div>
-        <div class="no">${esc(inv.invoice_number || "")}</div>
-        <div class="no">${createdOn}</div>
-        <span class="inv-status ${inv.status}">${inv.status === "paid" ? "PAYÉE" : "NON PAYÉE"}</span>
+    <div class="fac__party">
+      <div class="fac__lbl">Clients:</div>
+      <div>
+        <div class="fac__cname">${esc(inv.client_name)}</div>
+        ${inv.client_address ? `<div class="fac__caddr">${esc(inv.client_address)}</div>` : ""}
       </div>
     </div>
+    ${(inv.contact_name || inv.client_phone) ? `
+    <div class="fac__party">
+      <div class="fac__lbl">Contact:</div>
+      <div class="fac__contact">${esc([inv.contact_name, inv.client_phone].filter(Boolean).join(" "))}</div>
+    </div>` : ""}
 
-    <hr class="sep">
+    <hr class="fac__rule">
 
-    <div class="blocks">
-      <div class="b">
-        <h4>Facturé à</h4>
-        <div>${clientLines || "—"}</div>
-      </div>
-      <div class="b">
-        <h4>Événement</h4>
-        <div>${eventLines}</div>
-      </div>
-    </div>
-
-    <table class="items">
+    <table class="fac__table">
+      <colgroup>
+        <col class="c-det"><col class="c-prix"><col class="c-qty"><col class="c-tot">
+      </colgroup>
       <thead>
-        <tr>
-          <th>Description</th><th class="num">Qté</th><th class="num">Prix</th><th class="num">Total</th>
-        </tr>
+        <tr><th>Détails</th><th>Prix unité</th><th>Qty</th><th class="r">Total</th></tr>
       </thead>
-      <tbody>${rows || '<tr><td colspan="4">—</td></tr>'}</tbody>
+      <tbody>${rows}</tbody>
     </table>
 
-    <div class="grand">
-      <div class="box">
-        <div class="ln total"><span>Total</span><span class="amt">${money(inv.total)}</span></div>
-      </div>
+    <div class="fac__sub">
+      <span class="fac__lbl">Subtotal</span>
+      <span>${esc(dollars(inv.subtotal))}</span>
     </div>
 
-    ${inv.notes ? `<div class="inv-notes"><strong>Notes :</strong>\n${esc(inv.notes)}</div>` : ""}
+    <div class="fac__lower">
+      <div class="fac__totals">
+        <div class="ln"><span>Tax</span><span>${esc(num(inv.tax || 0))}</span></div>
+        <div class="ln total"><span class="fac__lbl">Total</span><span>${esc(dollars(inv.total))}</span></div>
+      </div>
 
-    <div class="inv-foot">Merci de faire confiance à ${esc(BUSINESS.name)} ! 🎈</div>
+      <div class="fac__meta">
+        <div><span class="fac__lbl">Invoice no:</span><span class="v">${esc(inv.invoice_number || "")}</span></div>
+        <div><span class="fac__lbl">date:</span><span class="v">${esc(dotDate(inv.invoice_date))}</span></div>
+      </div>
+
+      <div class="fac__pay">
+        <span class="fac__lbl">Info payment:</span>
+        ${esc(b.owner_name || "")}${addr ? esc(addr).replace(/\n/g, "<br>") : ""}
+        ${b.phone ? "<br>" + esc(b.phone) : ""}
+      </div>
+
+      <div class="fac__sign">
+        <div class="fac__signname">${esc(b.owner_name || "")}</div>
+        <div class="fac__signtitle">${esc(b.owner_title || "")}</div>
+      </div>
+    </div>
   `;
 }
 
+/* ---------- Boutons d'action ---------- */
 function bindActions() {
-  // Marquer payée / non payée
   const paidBtn = $("paidBtn");
   syncPaidBtn();
   paidBtn.addEventListener("click", async () => {
     const newStatus = invoice.status === "paid" ? "unpaid" : "paid";
-    const { error } = await supabase
-      .from("alaska_invoices")
-      .update({ status: newStatus })
-      .eq("id", invoice.id);
+    const { error } = await supabase.from("alaska_invoices").update({ status: newStatus }).eq("id", invoice.id);
     if (error) { toast(error.message, true); return; }
-    invoice.status = newStatus;
-    render();
-    syncPaidBtn();
+    invoice.status = newStatus; syncPaidBtn();
     toast(newStatus === "paid" ? "Marquée payée ✓" : "Marquée non payée");
   });
-
   function syncPaidBtn() {
     const isPaid = invoice.status === "paid";
     paidBtn.querySelector("span").textContent = isPaid ? "Marquer non payée" : "Marquer payée";
     paidBtn.querySelector("i").className = isPaid ? "fa-regular fa-circle-xmark" : "fa-regular fa-circle-check";
   }
 
-  // Imprimer / PDF
   $("printBtn").addEventListener("click", () => window.print());
 
-  // Envoyer par courriel (ouvre l'app de courriel pré-remplie)
   $("emailBtn").addEventListener("click", () => {
     const inv = invoice;
+    const b = settings.business;
     const itemsTxt = (inv.items || [])
-      .map((it) => `  • ${it.description} — ${it.qty} × ${money(it.price)} = ${money(it.total)}`)
+      .map((it) => `  • ${it.description} — ${it.qty} × ${dollars(it.price)}${it.suffix || ""} = ${dollars(it.total)}`)
       .join("\n");
-    const subject = `Facture ${inv.invoice_number} — ${BUSINESS.name}`;
+    const subject = `Facture ${inv.invoice_number} — ${b.business_name || "Alaska Animation"}`;
     const body =
-`Bonjour ${inv.client_name},
+`Bonjour${inv.contact_name ? " " + inv.contact_name : ""},
 
-Voici votre facture pour ${inv.event_type ? inv.event_type.toLowerCase() : "l'événement"}${inv.event_date ? " du " + fmtDate(inv.event_date) : ""}.
+Voici votre facture ${inv.invoice_number}${inv.invoice_date ? " (" + dotDate(inv.invoice_date) + ")" : ""} :
 
-Facture : ${inv.invoice_number}
 ${itemsTxt}
 
-TOTAL : ${money(inv.total)}
+Sous-total : ${dollars(inv.subtotal)}
+Taxe : ${num(inv.tax || 0)}
+TOTAL : ${dollars(inv.total)}
 Statut : ${inv.status === "paid" ? "Payée" : "À payer"}
-${inv.notes ? "\n" + inv.notes + "\n" : ""}
-Merci beaucoup !
-${BUSINESS.name}${BUSINESS.phone ? "\n" + BUSINESS.phone : ""}`;
 
+Merci beaucoup !
+${b.owner_name || ""}
+${b.business_name || "Alaska Animation"}${b.phone ? "\n" + b.phone : ""}`;
     const to = inv.client_email || "";
     window.location.href =
       `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
 
-  // Supprimer
   $("deleteBtn").addEventListener("click", async () => {
     if (!confirm("Supprimer définitivement cette facture ?")) return;
     const { error } = await supabase.from("alaska_invoices").delete().eq("id", invoice.id);

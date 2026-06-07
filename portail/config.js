@@ -1,35 +1,37 @@
 /* ===========================================================
-   Portail Alaska Animation — Configuration
+   Portail Alaska Animation — Configuration technique
    -----------------------------------------------------------
-   Tu peux modifier les infos d'entreprise ci-dessous : elles
-   apparaissent en haut de chaque facture (impression / PDF).
+   ⚠️ Maggie n'a PAS besoin de toucher à ce fichier.
+   Tous les réglages modifiables (services, prix, coordonnées,
+   courriel…) se font dans la page « ⚙️ Réglages » du portail.
 
-   ⚠️ Ne change PAS SUPABASE_URL ni SUPABASE_KEY : ce sont les
-   coordonnées de ta base de données (la clé est « publique »,
-   c'est normal et sans danger — l'accès est protégé par mot
-   de passe et par les règles de sécurité de la base).
+   Ne change PAS les deux clés ci-dessous : ce sont les
+   coordonnées de la base de données (la clé est « publique »,
+   c'est normal — l'accès reste protégé par mot de passe + RLS).
    =========================================================== */
 
 export const SUPABASE_URL = "https://ryaigwgkskeceseglhli.supabase.co";
 export const SUPABASE_KEY = "sb_publishable_0PuIPgM4uq61bgBZn8TDbQ_y9vbC8xd";
 
-/* Infos affichées sur les factures — ajuste-les à ta convenance */
-export const BUSINESS = {
-  name:    "Alaska Animation",
-  tagline: "Animation de fêtes · Maquillage de fantaisie · Sculptures de ballons",
-  region:  "Région des Bois-Francs · Plessisville (QC)",
-  email:   "",            // ← ajoute ton courriel d'affaires (apparaît sur la facture)
-  phone:   "",            // ← ajoute ton numéro de téléphone (optionnel)
-  website: "alaskaanimation.ca",
-  logo:    "../images/logo/logo-alaska-animation.svg",
+/* Valeurs par défaut si aucun réglage n'existe encore.
+   (Sert seulement de filet de sécurité — les vrais réglages
+   sont enregistrés dans la base via la page Réglages.) */
+export const DEFAULT_SETTINGS = {
+  business: {
+    owner_name:    "Maggie Forget",
+    business_name: "Alaska Animation",
+    owner_title:   "Propriétaire de Alaska Animation",
+    address:       "1735 rue chanoine-boulet\nPlessisville, Qc, G6L 1B3",
+    phone:         "(514)708-8281",
+    email:         "alaskaanimationco@outlook.com",
+  },
+  next_invoice_no: 1,
+  services: [
+    { label: "Forfait maquillage fantaisie base",        price: 205, suffix: "/h" },
+    { label: "Forfait maquillage fantaisie additionnel", price: 145, suffix: ""   },
+    { label: "Sculptures de ballons",                     price: 0,   suffix: "/h" },
+    { label: "Animation de fête complète",                price: 0,   suffix: ""   },
+    { label: "Événement corporatif / festival",          price: 0,   suffix: "/h" },
+    { label: "Frais de déplacement",                      price: 0,   suffix: ""   },
+  ],
 };
-
-/* Suggestions de services (remplissent automatiquement la liste déroulante).
-   Le prix est seulement une suggestion — tu peux toujours le changer. */
-export const SERVICES = [
-  { label: "Maquillage de fantaisie (par heure)", price: 0 },
-  { label: "Sculptures de ballons (par heure)",   price: 0 },
-  { label: "Animation de fête complète",          price: 0 },
-  { label: "Événement corporatif / festival",     price: 0 },
-  { label: "Frais de déplacement",                price: 0 },
-];
