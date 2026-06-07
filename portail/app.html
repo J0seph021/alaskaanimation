@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#FF69B4">
+<title>Facturation — Alaska Animation</title>
+<link rel="icon" href="../images/logo/logo-alaska-animation.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <img src="../images/logo/logo-alaska-animation.svg" alt="">
+  <div class="brand">Facturation<span>Alaska Animation</span></div>
+  <div class="spacer"></div>
+  <button id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Quitter</button>
+</div>
+
+<div class="wrap">
+  <div class="tabs">
+    <button id="tabNew" class="active">＋ Nouvelle facture</button>
+    <button id="tabList">📋 Mes factures</button>
+  </div>
+
+  <!-- ============ NOUVELLE FACTURE ============ -->
+  <section id="viewNew">
+    <form id="invForm">
+      <div class="card">
+        <h2 style="margin-top:0">Client</h2>
+        <label for="clientName">Nom du client *</label>
+        <input type="text" id="clientName" required placeholder="Ex. Marie-Eve Lavoie">
+        <div class="row">
+          <div>
+            <label for="clientPhone">Téléphone</label>
+            <input type="tel" id="clientPhone" placeholder="418-000-0000">
+          </div>
+          <div>
+            <label for="clientEmail">Courriel</label>
+            <input type="email" id="clientEmail" placeholder="client@courriel.com">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-top:0">Événement</h2>
+        <div class="row">
+          <div>
+            <label for="eventType">Type</label>
+            <select id="eventType">
+              <option value="">—</option>
+              <option>Fête d'enfant</option>
+              <option>Événement corporatif</option>
+              <option>Festival / Kermesse</option>
+              <option>Garderie / CPE</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div>
+            <label for="eventDate">Date</label>
+            <input type="date" id="eventDate">
+          </div>
+        </div>
+        <label for="eventLocation">Lieu</label>
+        <input type="text" id="eventLocation" placeholder="Ville / adresse de l'événement">
+      </div>
+
+      <div class="card">
+        <h2 style="margin-top:0">Services</h2>
+        <div class="items-head">
+          <div>Description</div><div>Qté</div><div>Prix</div><div>Total</div><div></div>
+        </div>
+        <div id="itemsList"></div>
+        <button type="button" class="add-item" id="addItem">
+          <i class="fa-solid fa-plus"></i> Ajouter un service
+        </button>
+
+        <label for="notes">Notes (optionnel)</label>
+        <textarea id="notes" placeholder="Remarques, modalités de paiement, merci…"></textarea>
+
+        <div class="totals">Total : <span id="grandTotal">0,00 $</span></div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" id="saveBtn">
+        <i class="fa-solid fa-floppy-disk"></i> Enregistrer la facture
+      </button>
+    </form>
+  </section>
+
+  <!-- ============ MES FACTURES ============ -->
+  <section id="viewList" hidden>
+    <div class="search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="search" id="searchBox" placeholder="Chercher par nom, no de facture, lieu…">
+    </div>
+    <div id="listContainer"><p class="empty">Chargement…</p></div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<datalist id="serviceSuggestions"></datalist>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

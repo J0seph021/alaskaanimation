@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#FF69B4">
+<title>Portail — Alaska Animation</title>
+<link rel="icon" href="../images/logo/logo-alaska-animation.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="login-bg">
+  <form class="login card" id="loginForm">
+    <img src="../images/logo/logo-alaska-animation.svg" alt="Logo Alaska Animation">
+    <h1>Portail de facturation</h1>
+    <p class="sub">Réservé à Alaska Animation</p>
+
+    <label for="email">Courriel</label>
+    <input type="email" id="email" autocomplete="username" required placeholder="ton@courriel.com">
+
+    <label for="password">Mot de passe</label>
+    <input type="password" id="password" autocomplete="current-password" required placeholder="••••••••">
+
+    <p class="err" id="err"></p>
+
+    <button class="btn btn-primary btn-block" type="submit" id="submitBtn">
+      <i class="fa-solid fa-right-to-bracket"></i> Se connecter
+    </button>
+  </form>
+</div>
+
+<script type="module">
+import { supabase } from "./supabase.js";
+
+// Déjà connecté ? on va direct à l'app
+const { data: { session } } = await supabase.auth.getSession();
+if (session) window.location.replace("app.html");
+
+const form = document.getElementById("loginForm");
+const err  = document.getElementById("err");
+const btn  = document.getElementById("submitBtn");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  err.textContent = "";
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Connexion…';
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    err.textContent = "Courriel ou mot de passe incorrect.";
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Se connecter';
+    return;
+  }
+  window.location.replace("app.html");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#FF69B4">
+<title>Facture — Alaska Animation</title>
+<link rel="icon" href="../images/logo/logo-alaska-animation.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .doc{max-width:720px;margin:18px auto;padding:0 16px}
+  .invoice{background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(255,105,180,.18);padding:30px}
+  .inv-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+  .inv-biz{display:flex;gap:12px;align-items:center}
+  .inv-biz img{width:54px;height:54px}
+  .inv-biz .nm{font-size:1.3rem;font-weight:800;color:#FF1493}
+  .inv-biz .tg{font-size:.78rem;color:#9a6b7d;max-width:240px}
+  .inv-biz .ct{font-size:.78rem;color:#9a6b7d;margin-top:3px}
+  .inv-label{text-align:right}
+  .inv-label .big{font-size:1.5rem;font-weight:800;letter-spacing:1px;color:#2D2D2D}
+  .inv-label .no{color:#9a6b7d;font-size:.9rem;margin-top:2px}
+  .inv-status{display:inline-block;font-size:.74rem;font-weight:700;padding:4px 12px;border-radius:999px;margin-top:8px}
+  .inv-status.unpaid{background:#ffe2e2;color:#c0392b}
+  .inv-status.paid{background:#dff7e6;color:#1e8e4e}
+  hr.sep{border:none;border-top:1px solid #f3d7e3;margin:22px 0}
+  .blocks{display:flex;gap:30px;flex-wrap:wrap}
+  .blocks .b{flex:1;min-width:200px}
+  .blocks h4{margin:0 0 6px;font-size:.74rem;text-transform:uppercase;letter-spacing:.5px;color:#9a6b7d}
+  .blocks .b div{font-size:.95rem;line-height:1.5}
+  table.items{width:100%;border-collapse:collapse;margin-top:8px}
+  table.items th{text-align:left;font-size:.74rem;text-transform:uppercase;letter-spacing:.4px;color:#9a6b7d;padding:8px 6px;border-bottom:2px solid #f3d7e3}
+  table.items td{padding:11px 6px;border-bottom:1px solid #f3d7e3;font-size:.95rem;vertical-align:top}
+  table.items td.num,table.items th.num{text-align:right;white-space:nowrap}
+  .grand{display:flex;justify-content:flex-end;margin-top:16px}
+  .grand .box{min-width:230px}
+  .grand .ln{display:flex;justify-content:space-between;padding:6px 0}
+  .grand .ln.total{font-size:1.3rem;font-weight:800;border-top:2px solid #f3d7e3;margin-top:6px;padding-top:12px}
+  .grand .ln.total .amt{color:#FF1493}
+  .inv-notes{margin-top:22px;font-size:.9rem;color:#555;white-space:pre-wrap}
+  .inv-foot{text-align:center;color:#9a6b7d;font-size:.82rem;margin-top:26px}
+
+  @media print{
+    @page{margin:14mm}
+    body{background:#fff}
+    .topbar,.detail-actions,.toast{display:none !important}
+    .doc{margin:0;padding:0;max-width:none}
+    .invoice{box-shadow:none;border-radius:0;padding:0}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <img src="../images/logo/logo-alaska-animation.svg" alt="">
+  <div class="brand">Facture<span>Alaska Animation</span></div>
+  <div class="spacer"></div>
+  <button onclick="location.href='app.html'"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+</div>
+
+<div class="doc">
+  <div id="invoiceCard" class="invoice">
+    <p class="empty">Chargement…</p>
+  </div>
+
+  <div class="detail-actions" id="actions" hidden>
+    <button class="btn btn-ghost"   id="paidBtn"><i class="fa-regular fa-circle-check"></i> <span>Marquer payée</span></button>
+    <button class="btn btn-ghost"   id="emailBtn"><i class="fa-regular fa-envelope"></i> Envoyer par courriel</button>
+    <button class="btn btn-primary" id="printBtn"><i class="fa-solid fa-print"></i> Imprimer / PDF</button>
+    <button class="btn btn-ghost"   id="deleteBtn" style="color:#c0392b"><i class="fa-regular fa-trash-can"></i> Supprimer</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="facture.js"></script>
+</body>
+</html>

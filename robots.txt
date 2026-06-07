@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /echo86/
+Disallow: /portail/
 Sitemap: https://alaskaanimation.ca/sitemap.xml
