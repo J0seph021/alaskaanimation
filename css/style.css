@@ -1482,3 +1482,74 @@ ul { list-style: none; }
   transform: scale(1.08);
   box-shadow: 0 10px 28px rgba(255, 20, 147, 0.5);
 }
+
+/* ===========================================
+   Tarifs (liste synchronisée avec le portail)
+   =========================================== */
+.tarifs-card {
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 12px 34px 32px;
+}
+
+.tarif-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 2px dotted var(--pink-light);
+}
+
+.tarif-row:last-child {
+  border-bottom: none;
+}
+
+.tarif-row__label {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.tarif-row__price {
+  font-family: 'Fredoka One', cursive;
+  color: var(--pink-dark);
+  white-space: nowrap;
+  font-size: 1.1rem;
+}
+
+.tarif-row__from {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 0.72rem;
+  color: var(--text-light);
+}
+
+.tarif-row__unit {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.8em;
+  color: var(--text-light);
+}
+
+.tarif-row__ondemand {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+.tarifs-note {
+  text-align: center;
+  color: var(--text-medium);
+  font-size: var(--font-small);
+  margin-top: 24px;
+}
+
+.tarifs-cta {
+  text-align: center;
+  margin-top: 24px;
+}

@@ -161,47 +161,43 @@
     <section class="section section--pink">
       <div class="container">
         <div class="section__header reveal">
-          <h2 class="section__title">Nos forfaits</h2>
-          <p class="section__subtitle">Des formules adaptées à vos besoins et votre budget</p>
+          <h2 class="section__title">Nos tarifs</h2>
+          <p class="section__subtitle">Des prix clairs, adaptés à votre événement</p>
         </div>
-        <div class="pricing-grid">
-          <div class="pricing-card reveal">
-            <h3 class="pricing-card__title">Essentiel</h3>
-            <div class="pricing-card__price">À partir de XXX$</div>
-            <ul class="pricing-card__features">
-              <li>Maquillage OU Ballons</li>
-              <li>Durée : environ 1h</li>
-              <li>Jusqu'à 10-12 enfants</li>
-              <li>Matériel inclus</li>
-            </ul>
-            <a href="contact.html" class="btn-primary btn-small">Réserver</a>
+        <div class="tarifs-card reveal">
+          <div class="tarifs" id="tarifsList">
+            <!-- Liste synchronisée avec le portail. Ce contenu de secours ne
+                 s'affiche que si la version en ligne n'est pas disponible. -->
+            <div class="tarif-row">
+              <span class="tarif-row__label">Forfait maquillage fantaisie base</span>
+              <span class="tarif-row__price"><span class="tarif-row__from">à partir de</span> 205&nbsp;$<span class="tarif-row__unit">/h</span></span>
+            </div>
+            <div class="tarif-row">
+              <span class="tarif-row__label">Forfait maquillage fantaisie additionnel</span>
+              <span class="tarif-row__price"><span class="tarif-row__from">à partir de</span> 145&nbsp;$<span class="tarif-row__unit"></span></span>
+            </div>
+            <div class="tarif-row">
+              <span class="tarif-row__label">Sculptures de ballons</span>
+              <span class="tarif-row__price"><span class="tarif-row__ondemand">Sur demande</span></span>
+            </div>
+            <div class="tarif-row">
+              <span class="tarif-row__label">Animation de fête complète</span>
+              <span class="tarif-row__price"><span class="tarif-row__ondemand">Sur demande</span></span>
+            </div>
+            <div class="tarif-row">
+              <span class="tarif-row__label">Événement corporatif / festival</span>
+              <span class="tarif-row__price"><span class="tarif-row__ondemand">Sur demande</span></span>
+            </div>
+            <div class="tarif-row">
+              <span class="tarif-row__label">Frais de déplacement</span>
+              <span class="tarif-row__price"><span class="tarif-row__ondemand">Sur demande</span></span>
+            </div>
           </div>
-          <div class="pricing-card pricing-card--popular reveal">
-            <span class="pricing-badge">Le plus populaire !</span>
-            <h3 class="pricing-card__title">Populaire</h3>
-            <div class="pricing-card__price">À partir de XXX$</div>
-            <ul class="pricing-card__features">
-              <li>Maquillage + Ballons</li>
-              <li>Durée : environ 1h30</li>
-              <li>Jusqu'à 12-15 enfants</li>
-              <li>Matériel inclus</li>
-              <li>Cadeau souvenir pour chaque enfant</li>
-            </ul>
-            <a href="contact.html" class="btn-primary btn-small">Réserver</a>
-          </div>
-          <div class="pricing-card reveal">
-            <h3 class="pricing-card__title">Sur mesure</h3>
-            <div class="pricing-card__price">Sur devis</div>
-            <ul class="pricing-card__features">
-              <li>Combinaison personnalisée de services</li>
-              <li>Animation thématique possible</li>
-              <li>Événements de toute taille</li>
-              <li>Durée flexible</li>
-            </ul>
-            <a href="contact.html" class="btn-primary btn-small">Demander une soumission</a>
+          <p class="tarifs-note">Les prix peuvent varier selon le nombre d'enfants, la durée et la distance de déplacement. Écrivez-nous pour une soumission précise et gratuite !</p>
+          <div class="tarifs-cta">
+            <a href="contact.html" class="btn-primary">Demander une soumission gratuite</a>
           </div>
         </div>
-        <p class="text-center mt-40" style="color:var(--text-medium);font-size:var(--font-small);">Les prix peuvent varier selon le nombre d'enfants, la durée souhaitée et la distance de déplacement. Contactez-nous pour un prix exact !</p>
       </div>
     </section>
 
@@ -344,6 +340,7 @@
   </footer>
 
   <script src="js/main.js" defer></script>
+  <script src="js/tarifs.js" defer></script>
   <a href="https://m.me/100094362618231" class="messenger-fab" target="_blank" rel="noopener noreferrer" aria-label="Nous écrire sur Messenger">
     <i class="fa-brands fa-facebook-messenger"></i>
   </a>
