@@ -18,6 +18,10 @@
   --coral: #FF7F7F;
   --mint-fresh: #98FB98;
 
+  /* Couleur de marque (logo) */
+  --blue-brand: #A0D0E8;
+  --blue-brand-dark: #80B8D8;
+
   /* Neutres */
   --white: #FFFFFF;
   --off-white: #FFF8FA;
@@ -183,7 +187,7 @@ ul { list-style: none; }
   left: 0;
   width: 0;
   height: 3px;
-  background: var(--pink-primary);
+  background: var(--blue-brand-dark);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
