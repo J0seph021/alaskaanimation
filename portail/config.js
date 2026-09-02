@@ -28,9 +28,9 @@ export const DEFAULT_SETTINGS = {
   next_invoice_no: 1,
   services: [
     { label: "Forfait maquillage fantaisie base",        price: 205, suffix: "/h" },
-    { label: "Forfait maquillage fantaisie additionnel", price: 145, suffix: ""   },
+    { label: "Forfait maquillage fantaisie additionnel", price: 175, suffix: ""   },
     { label: "Sculptures de ballons",                     price: 0,   suffix: "/h" },
-    { label: "Animation de fête complète",                price: 0,   suffix: ""   },
+    { label: "Animation de fête d’enfant (8-12 enfants)", price: 205, suffix: ""   },
     { label: "Événement corporatif / festival",          price: 0,   suffix: "/h" },
     { label: "Frais de déplacement",                      price: 0,   suffix: ""   },
   ],
