@@ -359,9 +359,9 @@ ul { list-style: none; }
   z-index: 0;
   background-image:
     linear-gradient(135deg, rgba(214, 22, 118, 0.66) 0%, rgba(139, 74, 168, 0.58) 55%, rgba(255, 105, 180, 0.5) 100%),
-    url("../images/galerie/evenements-tente-animation.jpg");
+    url("../images/galerie/ballons-groupe-enfants.jpg");
   background-size: cover;
-  background-position: center 28%;
+  background-position: center 42%;
 }
 
 .hero__title {
