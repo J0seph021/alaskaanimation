@@ -152,6 +152,16 @@ textarea{resize:vertical;min-height:70px}
 .svc-head{display:grid;grid-template-columns:1fr 86px 64px 32px;gap:8px;font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin:6px 0}
 .svc-row .del{background:none;border:none;color:#d36;font-size:1.1rem;cursor:pointer;border-radius:8px}
 .svc-row .del:hover{background:#fde}
+.client-row{border:1.5px solid var(--line);border-radius:12px;margin-bottom:8px;background:#fff}
+.client-row summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:baseline;gap:10px}
+.client-row summary::-webkit-details-marker{display:none}
+.client-row summary::after{content:"\203A";margin-left:auto;color:var(--muted);font-size:1.2rem;transition:transform .2s}
+.client-row[open] summary::after{transform:rotate(90deg)}
+.client-row .cname{font-weight:700}
+.client-row .cmeta{font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.client-row .client-body{padding:0 14px 14px}
+.client-row .client-body label:first-child{margin-top:0}
+.client-row .c-del{background:none;border:none;color:#c0392b;cursor:pointer;font-weight:600;margin-top:12px;padding:6px 0;font-size:.9rem}
 .saved-bar{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,var(--bg) 30%);padding:14px 0 6px;margin-top:6px}
 
 /* ---- Fenêtre d'envoi (bas de l'écran sur mobile) ---- */

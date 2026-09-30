@@ -2,7 +2,7 @@
    Portail Alaska Animation — Page Réglages (simple)
    =========================================================== */
 import { requireSession } from "./supabase.js";
-import { getSettings, saveSettings } from "./settings.js";
+import { getSettings, saveSettings, ensureClients, sortClients } from "./settings.js";
 
 await requireSession();
 const settings = await getSettings();
@@ -53,6 +53,63 @@ function addSvcRow(label = "", price = "", suffix = "") {
 
 $("addSvc").addEventListener("click", () => addSvcRow());
 
+/* ---------- Mes clients ---------- */
+const clientList = $("clientList");
+
+function addClientRow(c = {}, open = false) {
+  const d = document.createElement("details");
+  d.className = "client-row";
+  d.open = open;
+  d.innerHTML = `
+    <summary><span class="cname">${esc(c.name) || "Nouveau client"}</span>
+      <span class="cmeta">${esc([c.contact, c.phone].filter(Boolean).join(" · "))}</span></summary>
+    <div class="client-body">
+      <label>Nom du client</label>
+      <input class="c-name" type="text" value="${esc(c.name)}" placeholder="Ex. CPE Les Petits Pas">
+      <label>Adresse</label>
+      <textarea class="c-address" placeholder="Rue, ville, code postal…">${esc(c.address)}</textarea>
+      <label>Personne contact</label>
+      <input class="c-contact" type="text" value="${esc(c.contact)}" placeholder="Ex. Julie Martel">
+      <div class="row">
+        <div><label>Téléphone</label>
+          <input class="c-phone" type="tel" value="${esc(c.phone)}" placeholder="(819) 000-0000"></div>
+        <div><label>Courriel</label>
+          <input class="c-email" type="email" multiple value="${esc(c.email)}" placeholder="client@courriel.com"></div>
+      </div>
+      <button type="button" class="c-del"><i class="fa-regular fa-trash-can"></i> Retirer ce client</button>
+    </div>`;
+  const nameEl = d.querySelector(".c-name");
+  nameEl.addEventListener("input", () =>
+    (d.querySelector(".cname").textContent = nameEl.value.trim() || "Nouveau client"));
+  d.querySelector(".c-del").addEventListener("click", () => {
+    if (nameEl.value.trim() && !confirm("Retirer « " + nameEl.value.trim() + " » de ta liste de clients ?")) return;
+    d.remove();
+  });
+  clientList.appendChild(d);
+  if (open) nameEl.focus();
+}
+
+function readClients() {
+  const list = [];
+  clientList.querySelectorAll(".client-row").forEach((d) => {
+    const v = (cls) => d.querySelector(cls).value.trim();
+    const name = v(".c-name");
+    if (name) list.push({ name, address: v(".c-address"), contact: v(".c-contact"), phone: v(".c-phone"), email: v(".c-email") });
+  });
+  return sortClients(list);
+}
+
+(await ensureClients()).forEach((c) => addClientRow(c));
+$("addClient").addEventListener("click", () => addClientRow({}, true));
+
+$("clientSearch").addEventListener("input", (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  clientList.querySelectorAll(".client-row").forEach((d) => {
+    const txt = [...d.querySelectorAll("input,textarea")].map((i) => i.value).join(" ").toLowerCase();
+    d.hidden = !!q && !txt.includes(q);
+  });
+});
+
 /* ---------- Enregistrer ---------- */
 $("saveBtn").addEventListener("click", async () => {
   const services = [];
@@ -79,6 +136,7 @@ $("saveBtn").addEventListener("click", async () => {
     },
     next_invoice_no: Number.isFinite(next) && next > 0 ? next : 1,
     services: services.length ? services : settings.services,
+    clients: readClients(),
   };
 
   const btn = $("saveBtn");

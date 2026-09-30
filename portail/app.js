@@ -2,7 +2,7 @@
    Portail Alaska Animation — Création & liste des factures
    =========================================================== */
 import { supabase, requireSession, signOut } from "./supabase.js";
-import { getSettings, bumpInvoiceNo } from "./settings.js";
+import { getSettings, ensureClients, afterInvoiceSaved, clientFromInvoice } from "./settings.js";
 
 await requireSession();
 const settings = await getSettings();
@@ -53,6 +53,27 @@ settings.services.forEach((s) => {
   o.value = s.label;
   dl.appendChild(o);
   SVC[s.label] = s;
+});
+
+/* ---------- Banque de clients (liste déroulante) ---------- */
+const clientPick = $("clientPick");
+const CLIENT_INPUTS = { name: "clientName", address: "clientAddress", contact: "contactName",
+                        phone: "contactPhone", email: "clientEmail" };
+let clients = [];
+
+ensureClients().then((list) => {
+  clients = list;
+  list.forEach((c, i) => {
+    const o = document.createElement("option");
+    o.value = String(i);
+    o.textContent = c.name;
+    clientPick.appendChild(o);
+  });
+});
+
+clientPick.addEventListener("change", () => {
+  const c = clientPick.value === "" ? null : clients[Number(clientPick.value)];   // "" = nouveau client
+  Object.entries(CLIENT_INPUTS).forEach(([f, id]) => ($(id).value = c ? c[f] || "" : ""));
 });
 
 /* ---------- Lignes de service ---------- */
@@ -162,9 +183,9 @@ $("invForm").addEventListener("submit", async (e) => {
     return;
   }
 
-  // Prépare le prochain numéro pour la facture suivante
-  const num = parseInt(payload.invoice_number, 10);
-  if (Number.isFinite(num)) { try { await bumpInvoiceNo(num); } catch (_) {} }
+  // Mémorise le client et prépare le prochain numéro de facture
+  try { await afterInvoiceSaved(clientFromInvoice(payload), parseInt(payload.invoice_number, 10)); }
+  catch (err) { console.error(err); }
 
   toast("Facture " + data.invoice_number + " enregistrée ✓");
   window.location.href = "facture.html?id=" + data.id;
