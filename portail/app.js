@@ -3,6 +3,7 @@
    =========================================================== */
 import { supabase, requireSession, signOut } from "./supabase.js";
 import { getSettings, ensureClients, afterInvoiceSaved, clientFromInvoice } from "./settings.js";
+import { parseNotes, expenseTotals, describeExpense } from "./notes.js";
 
 await requireSession();
 const settings = await getSettings();
@@ -199,11 +200,15 @@ async function loadInvoices() {
   box.innerHTML = '<p class="empty">Chargement…</p>';
   const { data, error } = await supabase
     .from("alaska_invoices")
-    .select("id, invoice_number, invoice_date, client_name, total, status, created_at")
+    .select("*")
     .order("created_at", { ascending: false });
   if (error) { box.innerHTML = '<p class="empty">Erreur de chargement.</p>'; toast(error.message, true); return; }
-  allInvoices = data || [];
+  allInvoices = (data || []).map((inv) => {
+    const n = parseNotes(inv.notes);
+    return { ...inv, _notes: n, _exp: expenseTotals(n.expenses) };
+  });
   renderInvoices(allInvoices);
+  renderBilan();
 }
 
 function renderInvoices(list) {
@@ -224,7 +229,8 @@ function renderInvoices(list) {
       <div class="info">
         <div class="name">${esc(inv.client_name)}</div>
         <div class="meta">Facture ${esc(inv.invoice_number || "")} · ${when}</div>
-        <span class="badge ${inv.status}">${inv.status === "paid" ? "Payée" : "Non payée"}</span>
+        <span class="badge ${inv.status}">${inv.status === "paid" ? "Payée" : "Non payée"}</span>${
+          inv._exp && inv._exp.total ? `<span class="exp-tag">Dépenses ${money(inv._exp.total)}</span>` : ""}
       </div>
       <div class="amount">${money(inv.total)}</div>
       <i class="fa-solid fa-chevron-right chev"></i>`;
@@ -236,4 +242,110 @@ $("searchBox").addEventListener("input", (e) => {
   const q = e.target.value.toLowerCase().trim();
   renderInvoices(!q ? allInvoices : allInvoices.filter((inv) =>
     [inv.client_name, inv.invoice_number].filter(Boolean).join(" ").toLowerCase().includes(q)));
+});
+
+/* ---------- Bilan annuel + export Excel ---------- */
+const invDate = (inv) => inv.invoice_date || String(inv.created_at || "").slice(0, 10);
+const invYear = (inv) => invDate(inv).slice(0, 4);
+const yearPick = $("yearPick");
+
+function renderBilan() {
+  const years = [...new Set(allInvoices.map(invYear).filter(Boolean))].sort().reverse();
+  if (!years.length) { $("bilan").hidden = true; return; }
+  const keep = yearPick.value;
+  yearPick.innerHTML = years.map((y) => `<option value="${y}">${y}</option>`).join("");
+  const thisYear = String(new Date().getFullYear());
+  yearPick.value = years.includes(keep) ? keep : (years.includes(thisYear) ? thisYear : years[0]);
+  $("bilan").hidden = false;
+  updateBilan();
+}
+
+function yearInvoices() {
+  return allInvoices.filter((inv) => invYear(inv) === yearPick.value)
+    .sort((a, b) => invDate(a).localeCompare(invDate(b)));
+}
+
+function updateBilan() {
+  const list = yearInvoices();
+  const revenue = list.reduce((s, i) => s + (Number(i.subtotal) || 0), 0);
+  const expenses = list.reduce((s, i) => s + i._exp.total, 0);
+  const unpaid = list.filter((i) => i.status !== "paid").reduce((s, i) => s + (Number(i.total) || 0), 0);
+  $("bRevenue").textContent = money(revenue);
+  $("bExpenses").textContent = money(expenses);
+  $("bProfit").textContent = money(revenue - expenses);
+  $("bHint").textContent = `${list.length} facture${list.length > 1 ? "s" : ""}` +
+    (unpaid ? ` · ${money(unpaid)} pas encore payé` : "") + " · Revenus avant taxes";
+}
+yearPick.addEventListener("change", updateBilan);
+
+function loadSheetJS() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  return new Promise((ok, ko) => {
+    const sc = document.createElement("script");
+    sc.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+    sc.onload = () => ok(window.XLSX);
+    sc.onerror = () => ko(new Error("Outil Excel non chargé"));
+    document.head.appendChild(sc);
+  });
+}
+
+$("exportBtn").addEventListener("click", async () => {
+  const btn = $("exportBtn");
+  btn.disabled = true;
+  try {
+    const XLSX = await loadSheetJS();
+    const year = yearPick.value;
+    const list = yearInvoices();
+
+    const facRows = list.map((i) => ({
+      "Date": invDate(i),
+      "No facture": i.invoice_number || "",
+      "Client": i.client_name || "",
+      "Statut": i.status === "paid" ? "Payée" : "Non payée",
+      "Services": (i.items || []).map((it) => it.description).filter(Boolean).join(", "),
+      "Revenu avant taxes": Number(i.subtotal) || 0,
+      "Taxes": Number(i.tax) || 0,
+      "Total facturé": Number(i.total) || 0,
+      "Main-d'œuvre": i._exp.labour,
+      "Autres dépenses": i._exp.other,
+      "Total dépenses": i._exp.total,
+      "Profit": (Number(i.subtotal) || 0) - i._exp.total,
+      "Notes": i._notes.text,
+    }));
+    const sum = (k) => facRows.reduce((s, r) => s + r[k], 0);
+    facRows.push({
+      "Date": "TOTAL " + year, "No facture": "", "Client": "", "Statut": "", "Services": "",
+      "Revenu avant taxes": sum("Revenu avant taxes"), "Taxes": sum("Taxes"), "Total facturé": sum("Total facturé"),
+      "Main-d'œuvre": sum("Main-d'œuvre"), "Autres dépenses": sum("Autres dépenses"),
+      "Total dépenses": sum("Total dépenses"), "Profit": sum("Profit"), "Notes": "",
+    });
+
+    const expRows = [];
+    list.forEach((i) => i._notes.expenses.forEach((e) => expRows.push({
+      "Date": invDate(i),
+      "No facture": i.invoice_number || "",
+      "Client": i.client_name || "",
+      "Type": e.type === "labour" ? "Main-d'œuvre" : "Autre",
+      "Description": e.label || "",
+      "Personnes": e.type === "labour" ? e.people : "",
+      "Heures": e.type === "labour" ? e.hours : "",
+      "Taux horaire": e.type === "labour" ? e.rate : "",
+      "Montant": e.total,
+      "Détail": describeExpense(e),
+    })));
+
+    const wb = XLSX.utils.book_new();
+    const ws1 = XLSX.utils.json_to_sheet(facRows);
+    ws1["!cols"] = [11, 10, 30, 10, 36, 14, 8, 12, 12, 12, 12, 12, 40].map((w) => ({ wch: w }));
+    XLSX.utils.book_append_sheet(wb, ws1, "Factures");
+    const ws2 = XLSX.utils.json_to_sheet(expRows.length ? expRows : [{ "Date": "Aucune dépense notée" }]);
+    ws2["!cols"] = [11, 10, 30, 13, 28, 10, 8, 12, 11, 40].map((w) => ({ wch: w }));
+    XLSX.utils.book_append_sheet(wb, ws2, "Dépenses");
+    XLSX.writeFile(wb, `Alaska-Animation-bilan-${year}.xlsx`);
+    toast("Fichier Excel téléchargé ✓");
+  } catch (e) {
+    console.error(e);
+    toast("Impossible de créer le fichier. Vérifie ta connexion.", true);
+  }
+  btn.disabled = false;
 });

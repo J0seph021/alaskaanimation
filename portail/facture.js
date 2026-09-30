@@ -4,6 +4,7 @@
    =========================================================== */
 import { supabase, requireSession } from "./supabase.js";
 import { getSettings } from "./settings.js";
+import { parseNotes, serializeNotes, expenseTotals, normalizeExpense } from "./notes.js";
 
 await requireSession();
 const settings = await getSettings();
@@ -49,6 +50,7 @@ async function load() {
   render();
   $("actions").hidden = false;
   bindActions();
+  initPrivate();
 }
 
 function render() {
@@ -354,4 +356,101 @@ function sendTextOnly() {
   if (to === null) return;
   closeSendSheet();
   openMailto(to, emailSubject(), bodyTextOnly());
+}
+
+/* ===========================================================
+   Notes et dépenses (privé, jamais sur la facture)
+   =========================================================== */
+const money2 = (n) =>
+  (Number(n) || 0).toLocaleString("fr-CA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " $";
+let notesDirty = false;
+
+function initPrivate() {
+  const { text, expenses } = parseNotes(invoice.notes);
+  $("noteText").value = text;
+  expenses.filter((e) => e.type === "labour").forEach((e) => addLabourRow(e));
+  expenses.filter((e) => e.type !== "labour").forEach((e) => addOtherRow(e));
+  $("addLabour").addEventListener("click", () => { addLabourRow({}, true); markDirty(); });
+  $("addOther").addEventListener("click", () => { addOtherRow({}, true); markDirty(); });
+  $("noteText").addEventListener("input", markDirty);
+  $("saveNotesBtn").addEventListener("click", saveNotes);
+  window.addEventListener("beforeunload", (e) => { if (notesDirty) { e.preventDefault(); e.returnValue = ""; } });
+  recalcExpenses();
+  $("privateBox").hidden = false;
+}
+
+function markDirty() { notesDirty = true; }
+
+function numInput(cls, label, value, step, placeholder) {
+  return `<label class="mini"><span>${label}</span>
+    <input class="${cls}" type="number" inputmode="decimal" min="0" step="${step}" placeholder="${placeholder}" value="${value ?? ""}"></label>`;
+}
+
+function wireRow(row, focus) {
+  row.querySelectorAll("input").forEach((i) => i.addEventListener("input", () => { markDirty(); recalcExpenses(); }));
+  row.querySelector(".del").addEventListener("click", () => { row.remove(); markDirty(); recalcExpenses(); });
+  if (focus) row.querySelector(".lbl").focus();
+}
+
+function addLabourRow(e = {}, focus = false) {
+  const row = document.createElement("div");
+  row.className = "exp-row exp-labour";
+  row.innerHTML = `
+    <label class="mini"><span>Qui</span>
+      <input class="lbl" type="text" placeholder="Ex. Sarah (employée)" value="${esc(e.label)}"></label>
+    ${numInput("people", "Pers.", e.people ?? 1, "1", "1")}
+    ${numInput("hours", "Heures", e.hours, "0.25", "0")}
+    ${numInput("rate", "$/h", e.rate, "0.01", "0")}
+    <div class="line-total">0 $</div>
+    <button type="button" class="del" title="Retirer" aria-label="Retirer">&times;</button>`;
+  $("labourList").appendChild(row);
+  wireRow(row, focus);
+}
+
+function addOtherRow(e = {}, focus = false) {
+  const row = document.createElement("div");
+  row.className = "exp-row exp-other";
+  row.innerHTML = `
+    <label class="mini"><span>Quoi</span>
+      <input class="lbl" type="text" placeholder="Ex. Peinture et paillettes" value="${esc(e.label)}"></label>
+    ${numInput("amount", "Montant $", e.amount, "0.01", "0")}
+    <button type="button" class="del" title="Retirer" aria-label="Retirer">&times;</button>`;
+  $("otherList").appendChild(row);
+  wireRow(row, focus);
+}
+
+function readExpenses() {
+  const v = (row, cls) => row.querySelector(cls).value;
+  const list = [];
+  $("labourList").querySelectorAll(".exp-row").forEach((r) =>
+    list.push(normalizeExpense({ type: "labour", label: v(r, ".lbl"), people: v(r, ".people"), hours: v(r, ".hours"), rate: v(r, ".rate") })));
+  $("otherList").querySelectorAll(".exp-row").forEach((r) =>
+    list.push(normalizeExpense({ type: "other", label: v(r, ".lbl"), amount: v(r, ".amount") })));
+  return list;
+}
+
+function recalcExpenses() {
+  const list = readExpenses();
+  $("labourList").querySelectorAll(".exp-row").forEach((r, i) =>
+    (r.querySelector(".line-total").textContent = money2(list.filter((e) => e.type === "labour")[i].total)));
+  const exp = expenseTotals(list).total;
+  const revenue = Number(invoice.subtotal) || 0;
+  $("sumRevenue").textContent = money2(revenue);
+  $("sumExpenses").textContent = money2(exp);
+  $("sumProfit").textContent = money2(revenue - exp);
+  $("sumProfit").parentElement.classList.toggle("neg", revenue - exp < 0);
+}
+
+async function saveNotes() {
+  const btn = $("saveNotesBtn");
+  const notes = serializeNotes({ text: $("noteText").value, expenses: readExpenses() });
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enregistrement…';
+  const { error } = await supabase.from("alaska_invoices").update({ notes }).eq("id", invoice.id);
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Enregistrer les notes';
+  if (error) { toast("Erreur : " + error.message, true); return; }
+  invoice.notes = notes;
+  notesDirty = false;
+  toast("Notes enregistrées ✓");
 }

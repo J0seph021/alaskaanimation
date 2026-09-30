@@ -96,6 +96,21 @@
 
   <!-- ============ MES FACTURES ============ -->
   <section id="viewList" hidden>
+    <div class="card bilan" id="bilan" hidden>
+      <div class="bilan__head">
+        <div class="section-title"><i class="fa-solid fa-chart-column"></i> Bilan</div>
+        <select id="yearPick" aria-label="Année"></select>
+      </div>
+      <div class="bilan__grid">
+        <div class="tile"><div class="k">Revenus</div><div class="v" id="bRevenue">0 $</div></div>
+        <div class="tile"><div class="k">Dépenses</div><div class="v" id="bExpenses">0 $</div></div>
+        <div class="tile profit"><div class="k">Profit</div><div class="v" id="bProfit">0 $</div></div>
+      </div>
+      <p class="hint" id="bHint"></p>
+      <button type="button" class="btn btn-ghost btn-block" id="exportBtn">
+        <i class="fa-solid fa-file-excel"></i> Exporter l'année pour le comptable (Excel)
+      </button>
+    </div>
     <div class="search">
       <i class="fa-solid fa-magnifying-glass"></i>
       <input type="search" id="searchBox" placeholder="Chercher par nom, no de facture…">

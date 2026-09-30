@@ -164,6 +164,38 @@ textarea{resize:vertical;min-height:70px}
 .client-row .c-del{background:none;border:none;color:#c0392b;cursor:pointer;font-weight:600;margin-top:12px;padding:6px 0;font-size:.9rem}
 .saved-bar{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,var(--bg) 30%);padding:14px 0 6px;margin-top:6px}
 
+/* ---- Notes et dépenses (page facture) ---- */
+.exp-title{font-size:.95rem;margin:18px 0 6px}
+.exp-row{display:grid;gap:7px;align-items:end}
+.exp-labour{grid-template-columns:1fr 56px 60px 64px 76px 30px}
+.exp-other{grid-template-columns:1fr 96px 30px}
+.exp-row .mini{display:block;margin:0;font-size:.68rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.exp-row .mini span{display:block;margin:0 0 3px 2px}
+.exp-row .line-total,.exp-row .del{margin-bottom:9px}
+.exp-row{margin-bottom:8px}
+.exp-row input{padding:10px 8px}
+.exp-row .line-total{font-weight:700;text-align:right;font-size:.9rem}
+.exp-row .del{background:none;border:none;color:#d36;font-size:1.1rem;cursor:pointer;padding:6px;border-radius:8px}
+.exp-row .del:hover{background:#fde}
+.exp-sum{margin-top:18px;border-top:1px solid var(--line);padding-top:10px}
+.exp-sum .ln{display:flex;justify-content:space-between;padding:4px 0;font-size:.92rem}
+.exp-sum .ln span:last-child{font-weight:700}
+.exp-sum .profit{font-size:1.05rem;border-top:1px dashed var(--line);margin-top:4px;padding-top:8px}
+.exp-sum .profit span:last-child{color:var(--accent)}
+.exp-sum .profit.neg span:last-child{color:#c0392b}
+
+/* ---- Bilan annuel (Mes factures) ---- */
+.bilan__head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.bilan__head .section-title{margin:0}
+.bilan__head select{width:auto;padding:8px 12px}
+.bilan__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{background:var(--bg);border-radius:12px;padding:10px 12px}
+.tile .k{font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.tile .v{font-size:1.1rem;font-weight:800;margin-top:2px;white-space:nowrap}
+.tile.profit .v{color:var(--accent)}
+.bilan .hint{margin:10px 0 12px}
+.exp-tag{display:inline-block;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;margin:3px 0 0 4px;background:#f1e6f8;color:var(--purple)}
+
 /* ---- Fenêtre d'envoi (bas de l'écran sur mobile) ---- */
 .sheet-bg{
   position:fixed;inset:0;z-index:40;background:rgba(45,45,45,.45);
@@ -197,6 +229,12 @@ textarea{resize:vertical;min-height:70px}
   .item-row .qty{grid-column:3 / 4}
   .item-row .line-total{grid-column:1 / 3;text-align:left;align-self:center}
   .item-row .del{grid-column:3 / 4;justify-self:end}
+  .exp-row.exp-labour{grid-template-columns:1fr 1fr 1fr;gap:6px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+  .exp-row.exp-labour > .mini:first-child{grid-column:1 / -1}
+  .exp-row.exp-labour .line-total{grid-column:1 / 3;text-align:left}
+  .exp-row.exp-labour .del{grid-column:3 / 4;justify-self:end}
+  .bilan__grid{grid-template-columns:1fr 1fr}
+  .tile.profit{grid-column:1 / -1}
   .svc-row{grid-template-columns:1fr 1fr;gap:6px;border-bottom:1px solid var(--line);padding-bottom:10px}
   .svc-row .lbl{grid-column:1 / -1}
   .svc-head{display:none}

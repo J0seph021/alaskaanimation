@@ -84,11 +84,12 @@
   /* Actions (cachées à l'impression) */
   .detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;max-width:660px;margin-left:auto;margin-right:auto;padding:0 16px}
   .detail-actions .btn{flex:1;min-width:140px}
+  .private{max-width:660px;margin:26px auto 40px;padding:0 16px}
 
   @media print{
     @page{margin:16mm}
     body{background:#fff}
-    .topbar,.detail-actions,.toast,.sheet-bg{display:none !important}
+    .topbar,.detail-actions,.toast,.sheet-bg,.private{display:none !important}
     .docwrap{margin:0;padding:0;max-width:none}
     .fac{padding:0;background:#fff}
   }
@@ -120,6 +121,35 @@
   <button class="btn btn-primary" id="printBtn"><i class="fa-solid fa-print"></i> Imprimer / PDF</button>
   <button class="btn btn-ghost"   id="deleteBtn" style="color:#c0392b"><i class="fa-regular fa-trash-can"></i> Supprimer</button>
 </div>
+
+<!-- ============ NOTES ET DÉPENSES (privé) ============ -->
+<section class="private" id="privateBox" hidden>
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-lock"></i> Notes et dépenses</div>
+    <p class="section-help">Privé : n'apparaît ni sur la facture, ni dans le PDF, ni dans le courriel. Pratique pour tes impôts.</p>
+
+    <h3 class="exp-title">Main-d'œuvre</h3>
+    <div id="labourList"></div>
+    <button type="button" class="add-item" id="addLabour"><i class="fa-solid fa-plus"></i> Ajouter de la main-d'œuvre</button>
+
+    <h3 class="exp-title">Autres dépenses</h3>
+    <div id="otherList"></div>
+    <button type="button" class="add-item" id="addOther"><i class="fa-solid fa-plus"></i> Ajouter une dépense (matériel, essence…)</button>
+
+    <div class="exp-sum">
+      <div class="ln"><span>Revenu de la facture (avant taxes)</span><span id="sumRevenue">0 $</span></div>
+      <div class="ln"><span>Dépenses</span><span id="sumExpenses">0 $</span></div>
+      <div class="ln profit"><span>Profit</span><span id="sumProfit">0 $</span></div>
+    </div>
+
+    <label for="noteText">Notes</label>
+    <textarea id="noteText" placeholder="Ex. Stationnement payé comptant, reçu dans la boîte à gants. Client à rappeler en juin."></textarea>
+
+    <button type="button" class="btn btn-primary btn-block" id="saveNotesBtn" style="margin-top:16px">
+      <i class="fa-solid fa-floppy-disk"></i> Enregistrer les notes
+    </button>
+  </div>
+</section>
 
 <!-- ============ ENVOI PAR COURRIEL ============ -->
 <div class="sheet-bg" id="sendSheet" hidden>
