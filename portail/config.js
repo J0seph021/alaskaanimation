@@ -21,7 +21,7 @@ export const DEFAULT_SETTINGS = {
     owner_name:    "Maggie Forget",
     business_name: "Alaska Animation",
     owner_title:   "Propriétaire de Alaska Animation",
-    address:       "1735 rue chanoine-boulet\nPlessisville, Qc, G6L 1B3",
+    address:       "2011 avenue Saint-Laurent\nPlessisville, Qc, G6L 2R4",
     phone:         "(514)708-8281",
     email:         "alaskaanimationco@outlook.com",
   },
