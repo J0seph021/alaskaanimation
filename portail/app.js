@@ -136,6 +136,7 @@ $("invForm").addEventListener("submit", async (e) => {
     client_address: $("clientAddress").value.trim() || null,
     contact_name:   $("contactName").value.trim() || null,
     client_phone:   $("contactPhone").value.trim() || null,
+    client_email:   $("clientEmail").value.trim() || null,
     items,
     subtotal,
     tax,

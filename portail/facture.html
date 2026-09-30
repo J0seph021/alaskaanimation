@@ -76,6 +76,11 @@
   .fac__signname{font-family:"Parisienne",cursive;font-size:2.4rem;line-height:1;color:var(--ink)}
   .fac__signtitle{font-size:.74rem;color:var(--soft);margin-top:6px;max-width:200px;margin-left:auto}
 
+  /* Version PDF (pièce jointe du courriel) : format Lettre, pleine page crème */
+  .fac.fac--pdf{width:816px;min-height:1054px;padding:64px 72px 56px}
+  .fac--pdf .fac__title{font-size:5rem;margin-bottom:40px}
+  .fac--pdf .fac__signname{font-size:2.4rem}
+
   /* Actions (cachées à l'impression) */
   .detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;max-width:660px;margin-left:auto;margin-right:auto;padding:0 16px}
   .detail-actions .btn{flex:1;min-width:140px}
@@ -83,7 +88,7 @@
   @media print{
     @page{margin:16mm}
     body{background:#fff}
-    .topbar,.detail-actions,.toast{display:none !important}
+    .topbar,.detail-actions,.toast,.sheet-bg{display:none !important}
     .docwrap{margin:0;padding:0;max-width:none}
     .fac{padding:0;background:#fff}
   }
@@ -116,8 +121,31 @@
   <button class="btn btn-ghost"   id="deleteBtn" style="color:#c0392b"><i class="fa-regular fa-trash-can"></i> Supprimer</button>
 </div>
 
+<!-- ============ ENVOI PAR COURRIEL ============ -->
+<div class="sheet-bg" id="sendSheet" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sendTitle">
+    <div class="sheet__head">
+      <h2 id="sendTitle"><i class="fa-regular fa-envelope"></i> Envoyer la facture</h2>
+      <button type="button" class="sheet__close" id="sendClose" aria-label="Fermer">&times;</button>
+    </div>
+
+    <label for="sendTo">Courriel du client</label>
+    <input type="email" id="sendTo" multiple inputmode="email" autocomplete="email" placeholder="client@courriel.com">
+
+    <button type="button" class="btn btn-primary btn-block" id="sendPdfBtn" disabled>
+      <i class="fa-solid fa-spinner fa-spin"></i> Préparation du PDF…
+    </button>
+    <p class="hint sheet__hint" id="sendHint"></p>
+
+    <button type="button" class="btn btn-ghost btn-block" id="sendTextBtn">
+      <i class="fa-regular fa-envelope"></i> Courriel sans pièce jointe
+    </button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js" defer></script>
 <script type="module" src="facture.js"></script>
 </body>
 </html>

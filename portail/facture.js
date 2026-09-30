@@ -75,10 +75,11 @@ function render() {
         ${inv.client_address ? `<div class="fac__caddr">${esc(inv.client_address)}</div>` : ""}
       </div>
     </div>
-    ${(inv.contact_name || inv.client_phone) ? `
+    ${(inv.contact_name || inv.client_phone || inv.client_email) ? `
     <div class="fac__party">
       <div class="fac__lbl">Contact:</div>
-      <div class="fac__contact">${esc([inv.contact_name, inv.client_phone].filter(Boolean).join(" "))}</div>
+      <div class="fac__contact">${esc([inv.contact_name, inv.client_phone].filter(Boolean).join(" "))}${
+        inv.client_email ? `<div>${esc(inv.client_email)}</div>` : ""}</div>
     </div>` : ""}
 
     <hr class="fac__rule">
@@ -142,17 +143,156 @@ function bindActions() {
 
   $("printBtn").addEventListener("click", () => window.print());
 
-  $("emailBtn").addEventListener("click", () => {
-    const inv = invoice;
-    const b = settings.business;
-    const itemsTxt = (inv.items || [])
-      .map((it) => `  • ${it.description} — ${it.qty} × ${dollars(it.price)}${it.suffix || ""} = ${dollars(it.total)}`)
-      .join("\n");
-    const subject = `Facture ${inv.invoice_number} — ${b.business_name || "Alaska Animation"}`;
-    const body =
-`Bonjour${inv.contact_name ? " " + inv.contact_name : ""},
+  $("emailBtn").addEventListener("click", openSendSheet);
+  $("sendClose").addEventListener("click", closeSendSheet);
+  $("sendSheet").addEventListener("click", (e) => { if (e.target.id === "sendSheet") closeSendSheet(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSendSheet(); });
+  $("sendPdfBtn").addEventListener("click", sendWithPdf);
+  $("sendTextBtn").addEventListener("click", sendTextOnly);
 
-Voici votre facture ${inv.invoice_number}${inv.invoice_date ? " (" + dotDate(inv.invoice_date) + ")" : ""} :
+  $("deleteBtn").addEventListener("click", async () => {
+    if (!confirm("Supprimer définitivement cette facture ?")) return;
+    const { error } = await supabase.from("alaska_invoices").delete().eq("id", invoice.id);
+    if (error) { toast(error.message, true); return; }
+    window.location.replace("app.html");
+  });
+}
+
+/* ===========================================================
+   Envoi par courriel
+   -----------------------------------------------------------
+   Sur téléphone : le PDF de la facture est créé ici, puis le
+   menu « Partager » du téléphone l'envoie à Outlook / Gmail
+   déjà en pièce jointe. Le courriel du client est copié pour
+   être collé dans « À ».
+   Ailleurs : le PDF se télécharge et le courriel s'ouvre avec
+   l'adresse, l'objet et le message déjà remplis.
+   =========================================================== */
+const canShareFiles = (() => {
+  try {
+    return !!navigator.canShare &&
+      navigator.canShare({ files: [new File(["x"], "test.pdf", { type: "application/pdf" })] });
+  } catch (_) { return false; }
+})();
+
+let pdfFile = null;     // PDF prêt (créé une seule fois)
+let pdfPromise = null;
+
+const pdfName = () =>
+  `Facture-${String(invoice.invoice_number || "").replace(/[^\w-]+/g, "") || "Alaska"}-Alaska-Animation.pdf`;
+
+async function buildPdf() {
+  if (typeof html2pdf === "undefined") throw new Error("Outil PDF non chargé");
+  if (document.fonts && document.fonts.ready) await document.fonts.ready;
+  const el = $("facCard").cloneNode(true);
+  el.removeAttribute("id");
+  el.classList.add("fac--pdf");
+  const blob = await html2pdf().set({
+    margin: 0,
+    image: { type: "jpeg", quality: 0.95 },
+    html2canvas: { scale: 2, backgroundColor: "#F4F1E9", windowWidth: 900, scrollX: 0, scrollY: 0 },
+    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+  }).from(el).outputPdf("blob");
+  return new File([blob], pdfName(), { type: "application/pdf" });
+}
+
+function preparePdf() {
+  if (!pdfPromise) {
+    pdfPromise = buildPdf()
+      .then((f) => (pdfFile = f))
+      .catch((e) => { console.error(e); pdfPromise = null; throw e; });
+  }
+  return pdfPromise;
+}
+
+function setPdfBtn(state) {
+  const btn = $("sendPdfBtn");
+  if (state === "loading") {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Préparation du PDF…';
+  } else if (state === "error") {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Réessayer de créer le PDF';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = canShareFiles
+      ? '<i class="fa-solid fa-paperclip"></i> Envoyer avec le PDF'
+      : '<i class="fa-solid fa-paperclip"></i> Télécharger le PDF et écrire le courriel';
+  }
+}
+
+function openSendSheet() {
+  $("sendTo").value = invoice.client_email || "";
+  $("sendHint").textContent = canShareFiles
+    ? "Choisis Outlook (ou Gmail) dans la liste : la facture PDF sera déjà jointe. " +
+      "Le courriel du client est copié automatiquement : appuie longuement dans « À » et choisis Coller."
+    : "La facture PDF va se télécharger et ton courriel va s'ouvrir avec l'adresse et le message déjà écrits. " +
+      "Il reste à joindre le PDF avec le trombone 📎.";
+  $("sendSheet").hidden = false;
+  if (pdfFile) { setPdfBtn("ready"); return; }
+  setPdfBtn("loading");
+  preparePdf().then(() => setPdfBtn("ready"), () => {
+    setPdfBtn("error");
+    toast("Impossible de créer le PDF. Vérifie ta connexion.", true);
+  });
+}
+
+function closeSendSheet() { $("sendSheet").hidden = true; }
+
+/* Lit et valide l'adresse ; la garde dans la facture si elle a changé */
+function readRecipient() {
+  const input = $("sendTo");
+  const to = input.value.trim();
+  if (to && !input.checkValidity()) {
+    toast("Le courriel du client ne semble pas valide.", true);
+    input.focus();
+    return null;
+  }
+  if (to !== (invoice.client_email || "")) {
+    invoice.client_email = to || null;
+    render();
+    pdfFile = null; pdfPromise = null;     // l'adresse figure sur la facture
+    supabase.from("alaska_invoices").update({ client_email: invoice.client_email }).eq("id", invoice.id)
+      .then(({ error }) => { if (error) toast("Courriel non enregistré : " + error.message, true); });
+  }
+  return to;
+}
+
+function emailSubject() {
+  return `Facture ${invoice.invoice_number || ""} · ${settings.business.business_name || "Alaska Animation"}`;
+}
+
+function emailSignature() {
+  const b = settings.business;
+  return [b.owner_name, b.business_name || "Alaska Animation", b.phone].filter(Boolean).join("\n");
+}
+
+function emailHello() {
+  return `Bonjour${invoice.contact_name ? " " + invoice.contact_name : ""},`;
+}
+
+function bodyWithPdf() {
+  const inv = invoice;
+  return `${emailHello()}
+
+Vous trouverez ci-joint la facture ${inv.invoice_number || ""}${inv.invoice_date ? " du " + dotDate(inv.invoice_date) : ""} (PDF).
+
+Montant total : ${dollars(inv.total)}
+${inv.status === "paid" ? "Cette facture est déjà payée, merci !" : "Les informations de paiement sont indiquées sur la facture."}
+
+Merci beaucoup et au plaisir !
+
+${emailSignature()}`;
+}
+
+function bodyTextOnly() {
+  const inv = invoice;
+  const itemsTxt = (inv.items || [])
+    .map((it) => `  • ${it.description} : ${it.qty} × ${dollars(it.price)}${it.suffix || ""} = ${dollars(it.total)}`)
+    .join("\n");
+  return `${emailHello()}
+
+Voici votre facture ${inv.invoice_number || ""}${inv.invoice_date ? " (" + dotDate(inv.invoice_date) + ")" : ""} :
 
 ${itemsTxt}
 
@@ -162,17 +302,56 @@ TOTAL : ${dollars(inv.total)}
 Statut : ${inv.status === "paid" ? "Payée" : "À payer"}
 
 Merci beaucoup !
-${b.owner_name || ""}
-${b.business_name || "Alaska Animation"}${b.phone ? "\n" + b.phone : ""}`;
-    const to = inv.client_email || "";
-    window.location.href =
-      `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  });
 
-  $("deleteBtn").addEventListener("click", async () => {
-    if (!confirm("Supprimer définitivement cette facture ?")) return;
-    const { error } = await supabase.from("alaska_invoices").delete().eq("id", invoice.id);
-    if (error) { toast(error.message, true); return; }
-    window.location.replace("app.html");
-  });
+${emailSignature()}`;
+}
+
+function openMailto(to, subject, body) {
+  const addr = to.split(",").map((a) => encodeURIComponent(a.trim()).replace(/%40/g, "@")).filter(Boolean).join(",");
+  window.location.href = `mailto:${addr}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+function downloadFile(file) {
+  const url = URL.createObjectURL(file);
+  const a = document.createElement("a");
+  a.href = url; a.download = file.name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+async function sendWithPdf() {
+  const to = readRecipient();
+  if (to === null) return;
+
+  if (!pdfFile) {                       // PDF à (re)créer
+    setPdfBtn("loading");
+    try { await preparePdf(); setPdfBtn("ready"); }
+    catch (_) { setPdfBtn("error"); toast("Impossible de créer le PDF. Vérifie ta connexion.", true); return; }
+    // Le téléphone exige un nouveau toucher pour ouvrir le partage
+    if (canShareFiles) { toast("PDF prêt : appuie de nouveau sur « Envoyer »."); return; }
+  }
+
+  if (canShareFiles) {
+    if (to && navigator.clipboard) { try { await navigator.clipboard.writeText(to); } catch (_) {} }
+    try {
+      await navigator.share({ files: [pdfFile], title: emailSubject(), text: bodyWithPdf() });
+      closeSendSheet();
+      return;
+    } catch (e) {
+      if (e.name === "AbortError") return;          // annulé par l'utilisateur
+      console.error(e);                             // sinon : plan B ci-dessous
+    }
+  }
+
+  downloadFile(pdfFile);
+  closeSendSheet();
+  toast("PDF téléchargé : joins-le au courriel 📎");
+  setTimeout(() => openMailto(to, emailSubject(), bodyWithPdf()), 600);
+}
+
+function sendTextOnly() {
+  const to = readRecipient();
+  if (to === null) return;
+  closeSendSheet();
+  openMailto(to, emailSubject(), bodyTextOnly());
 }
